@@ -51,4 +51,5 @@ public interface OrderMapper {
     @Update("UPDATE `order` SET repay_money =  repay_money + #{repay},status = #{status} WHERE account = #{account};")
     boolean updateMoney(Order order);
 
+
 }

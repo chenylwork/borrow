@@ -81,7 +81,7 @@ public interface AccountMapper {
      * @param mobile 用户手机号
      * @return
      */
-    @Select("SELECT * FROM info WHERE mobile = #{mobile} AND isuse = '"+USER_Y+"';")
+    @Select("SELECT * FROM info WHERE mobile = #{mobile} AND isuse = '"+USER_Y+"' limit 1;")
     public AccountInfo getUseAccountByMobile(@Param("mobile") String mobile);
 
     /**

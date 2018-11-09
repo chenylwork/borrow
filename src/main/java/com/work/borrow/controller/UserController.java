@@ -98,4 +98,9 @@ public class UserController {
         return userService.realAccount(account);
     }
 
+    @RequestMapping("/search/account/info")
+    public Message getInfo(String mobile) {
+        return userService.getAccountInfo(mobile);
+    }
+
 }

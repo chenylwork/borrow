@@ -52,4 +52,11 @@ public interface UserService {
      */
     public Message realAccount(AccountInfo account);
 
+    /**
+     * 获取实名认证信息
+     * @param mobile 手机号
+     * @return
+     */
+    public Message getAccountInfo(String mobile);
+
 }

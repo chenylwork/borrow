@@ -1,11 +1,16 @@
 package com.work.borrow.po;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.work.borrow.mapper.AccountMapper;
+import org.apache.ibatis.annotations.Property;
+import org.apache.ibatis.annotations.Result;
 
 /**
  * 账户详细信息
  */
 public class AccountInfo {
+    @JsonProperty("infoID")
     private Integer id; // 用户编号
     private String mobile; // 手机号
     private String name; // 用户真实名称
@@ -26,14 +31,19 @@ public class AccountInfo {
     private String contactPhone; // 紧急联系人电话
     private String contactRelation; // 紧急联系人关系
     // 身份证照片信息
+    @JsonIgnore
     private String pidUp; // 身份证正面照
+    @JsonIgnore
     private String pidHand; // 身份证手持照
     // 银行卡信息
     private String cardCode; // 银行卡号
     private String cardHolder; // 银行卡持有人
     private String cardBank; // 银行卡所属行
+    @JsonIgnore
     private String use = AccountMapper.USER_Y; // 是否在使用中
+    @JsonIgnore
     private String check = AccountMapper.CHECK_W; // 审核状态：默认为待审核
+    @JsonIgnore
     private String fast = AccountMapper.FAST_N; // 是否快速审核
     private String maxMoney = "0"; // 最大借款金额
     public Integer getId() {
