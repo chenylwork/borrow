@@ -8,6 +8,7 @@ import java.util.Random;
  * 字符操作工具类
  */
 public class CharUtils {
+
     /**
      * 字符集字典
      */

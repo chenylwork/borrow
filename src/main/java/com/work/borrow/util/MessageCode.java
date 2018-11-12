@@ -37,5 +37,7 @@ public interface MessageCode {
     String VALUE_CODE_SMS_SEND_MOBILE_N = "12029"; // 手机号为空
     String VALUE_CODE_ACCOUNT_FAST_SET_Y = "12031"; // 开启快速审核成功
     String VALUE_CODE_ACCOUNT_FAST_SET_N = "12032"; // 开启快速审核失败
+    String VALUE_CODE_ACCOUNT_INFO_SEARCH_Y = "12040"; // 用户信息查询成功
+    String VALUE_CODE_ACCOUNT_INFO_SEARCH_N = "12041"; // 用户信息查询失败
 
 }

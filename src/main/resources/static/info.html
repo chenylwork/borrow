@@ -3,29 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>易贷王后台管理</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-paginator.js"></script>
 </head>
-<style>
-    .img_div {
-        float: left;
-        width: 305px;
-        height: 325px;
-    }
-</style>
 <body>
-<div>
-    <div class="img_div">
-        <img src="img/wx_QR.jpg" width="305px" height="305px"><br>
-        客服二维码<input type="button" value="更改"/>
-    </div>
-    <div class="img_div">
-        <img src="img/wx_pay_QR.jpg" width="305px" height="305px"><br>
-        微信支付二维码<input type="button" value="更改"/>
-    </div>
-    <div class="img_div">
-        <img src="img/ali_pay_QR.jpg" width="305px" height="305px"><br>
-        支付宝支付二维码<input type="button" value="更改"/>
-    </div>
-</div>
-<img src="">
+<h1>用户审核信息</h1>
 </body>
+<script src="js/myApp.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+$.ajax({
+    url:myobj.url+"account/search",
+    data:{"id":getQueryString("id")},
+    type:"get",
+    success:function(data){
+        console.log(data);
+    },
+});
+</script>
 </html>

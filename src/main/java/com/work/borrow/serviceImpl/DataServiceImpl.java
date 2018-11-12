@@ -1,9 +1,11 @@
 package com.work.borrow.serviceImpl;
 
 import com.work.borrow.mapper.AccountMapper;
+import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
 import com.work.borrow.util.FileUtils;
+import com.work.borrow.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * 数据资料操作业务类
@@ -146,6 +147,29 @@ public class DataServiceImpl implements DataService {
             message = Message.createSuccessMessage(Message.VALUE_CONTENT_ORDER_ADD_Y,Message.VALUE_CONTENT_ACCOUNT_FAST_SET_Y);
         } else {
             message = Message.createFailMessage(Message.VALUE_CONTENT_ORDER_ADD_N,Message.VALUE_CONTENT_ACCOUNT_FAST_SET_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message getAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
+        Message message = null;
+        Map<String,Object> param = new HashMap<>();
+        param.put("account",accountInfo);
+        param.put("page",page);
+        List<AccountInfo> accountList = accountMapper.searchAccountInfo(param);
+        if (accountList!=null && !accountList.isEmpty()) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_Y);
+            if (page != null && page.getNo() != 0) {
+                // 获取共个数
+                page.setData(accountList);
+                page.setSize(accountMapper.size(param));
+                message.put(Message.KEY_DATA,page);
+            } else {
+                message.put(Message.KEY_DATA,accountList);
+            }
+        } else {
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_N,Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_N);
         }
         return message;
     }

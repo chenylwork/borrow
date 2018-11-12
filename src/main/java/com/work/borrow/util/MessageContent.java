@@ -37,4 +37,7 @@ public interface MessageContent {
     String VALUE_CONTENT_ACCOUNT_FAST_SET_Y = "已开启快速审核"; // 开启快速审核成功
     String VALUE_CONTENT_ACCOUNT_FAST_SET_N = "快速审核开启失败"; // 开启快速审核失败
 
+    String VALUE_CONTENT_ACCOUNT_INFO_SEARCH_Y = "查询成功"; // 用户信息查询成功
+    String VALUE_CONTENT_ACCOUNT_INFO_SEARCH_N = "没有你要查询的用户信息"; // 用户信息查询失败
+
 }

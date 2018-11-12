@@ -1,9 +1,14 @@
 package com.work.borrow.mapper;
 
+import com.work.borrow.mapper.sql.provider.AccountSqlProvider;
 import com.work.borrow.po.Account;
 import com.work.borrow.po.AccountInfo;
+import com.work.borrow.util.Page;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 账户数据操作mapper
@@ -117,4 +122,20 @@ public interface AccountMapper {
      */
     @Update("UPDATE info SET isuse = '"+USR_N+"' WHERE mobile = #{mobile} AND id = #{id};")
     public boolean changeAccountUse(@Param("mobile")String mobile,@Param("id") int id);
+
+    /**
+     * 条件查询审核信息
+     * @param map
+     * @return
+     */
+    @SelectProvider(type=AccountSqlProvider.class,method="queryPageDataSql")
+    public List<AccountInfo> searchAccountInfo(Map<String,Object> map);
+
+    /**
+     * 查询个数
+     * @param map
+     * @return
+     */
+    @SelectProvider(type=AccountSqlProvider.class,method = "querySizeSql")
+    public int size(Map<String,Object> map);
 }

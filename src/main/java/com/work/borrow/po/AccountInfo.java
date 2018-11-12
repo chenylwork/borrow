@@ -39,13 +39,14 @@ public class AccountInfo {
     private String cardCode; // 银行卡号
     private String cardHolder; // 银行卡持有人
     private String cardBank; // 银行卡所属行
-    @JsonIgnore
+//    @JsonIgnore
     private String use = AccountMapper.USER_Y; // 是否在使用中
-    @JsonIgnore
+//    @JsonIgnore
     private String check = AccountMapper.CHECK_W; // 审核状态：默认为待审核
-    @JsonIgnore
+//    @JsonIgnore
     private String fast = AccountMapper.FAST_N; // 是否快速审核
     private String maxMoney = "0"; // 最大借款金额
+
     public Integer getId() {
         return id;
     }

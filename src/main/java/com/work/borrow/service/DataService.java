@@ -1,6 +1,8 @@
 package com.work.borrow.service;
 
+import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.Message;
+import com.work.borrow.util.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -34,5 +36,12 @@ public interface DataService {
      * @return
      */
     public Message setFast(String mobile,String id);
+
+    /**
+     * 查询用户详情信息
+     * @param accountInfo 查询条件
+     * @return
+     */
+    public Message getAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
 
 }

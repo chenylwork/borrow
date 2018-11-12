@@ -1,7 +1,9 @@
 package com.work.borrow.controller;
 
+import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
+import com.work.borrow.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,4 +44,13 @@ public class DataController {
     @RequestMapping("/account/check/fast")
     public Message changeFast(String mobile,String info){return dataService.setFast(mobile, info);}
 
+    /**
+     * 获取用户详情
+     * @param accountInfo 用户详情查询信息
+     * @return
+     */
+    @RequestMapping("/account/search")
+    public Message searchAccountInfo(AccountInfo accountInfo, Page page) {
+        return dataService.getAccountInfo(accountInfo,page);
+    }
 }
