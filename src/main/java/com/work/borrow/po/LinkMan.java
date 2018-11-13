@@ -5,6 +5,7 @@ package com.work.borrow.po;
  */
 public class LinkMan {
     private int id; // 编号
+    private int infoID; // 实名信息id
     private String account; // 账号手机号
     private String mobile; // 联系人手机号
     private String name; // 联系人名称
@@ -50,10 +51,19 @@ public class LinkMan {
         this.relation = relation;
     }
 
+    public int getInfoID() {
+        return infoID;
+    }
+
+    public void setInfoID(int infoID) {
+        this.infoID = infoID;
+    }
+
     @Override
     public String toString() {
         return "LinkMan{" +
                 "id=" + id +
+                ", infoID=" + infoID +
                 ", account='" + account + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", name='" + name + '\'' +

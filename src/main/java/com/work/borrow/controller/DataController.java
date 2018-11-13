@@ -22,7 +22,7 @@ public class DataController {
      */
     //@RequestMapping("/upload/pid/up")
     public Message uploadPidImg(MultipartFile up,String mobile) {
-        return dataService.uploadPidImg(up,mobile);
+        return dataService.uploadPidUpImg(up,mobile);
     }
 
     /**

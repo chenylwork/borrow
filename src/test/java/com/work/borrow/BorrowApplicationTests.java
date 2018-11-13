@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.work.borrow.dao.redis.RedisDao;
 import com.work.borrow.mapper.AccountMapper;
 import com.work.borrow.po.Account;
+import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.OrderService;
 import com.work.borrow.service.SMSService;
@@ -21,6 +22,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -101,6 +105,7 @@ public class BorrowApplicationTests {
         String bankName = FileUtils.getBankName("ICBC");
         System.err.println(bankName);
     }
+
 
 
 }

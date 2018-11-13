@@ -2,13 +2,17 @@ package com.work.borrow.serviceImpl;
 
 import com.work.borrow.mapper.AccountMapper;
 import com.work.borrow.po.AccountInfo;
+import com.work.borrow.po.LinkMan;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
+import com.work.borrow.service.UserService;
 import com.work.borrow.util.FileUtils;
 import com.work.borrow.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,11 +26,13 @@ import java.util.*;
 public class DataServiceImpl implements DataService {
     @Autowired
     private AccountMapper accountMapper;
+    @Autowired
+    private UserService userService;
 
     @Value("${pid.img.file.path}")
     private String filePath;
     @Override
-    public Message uploadPidImg(MultipartFile upFile, String mobile) {
+    public Message uploadPidUpImg(MultipartFile upFile, String mobile) {
         // 验证文件
         Message message = checkFile(upFile);
         if (message != null) return message;
@@ -51,6 +57,38 @@ public class DataServiceImpl implements DataService {
             message.put(Message.KEY_DATA,resultData);
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_PID_SAVE_N,Message.VALUE_CONTENT_ACCOUNT_PID_SAVE_N);
+        }
+        return message;
+    }
+    @Override
+    public Message uploadPidImg(MultipartFile upFile,MultipartFile downFile,AccountInfo accountInfo){
+        String upPath = "";
+        String downPath = "";
+        // 检查账户
+        Message message = userService.checkAccount(accountInfo.getAccount());
+        if (message.get(Message.KEY_STATUS).equals(Message.VALUE_STATUS_FAIL)) return message;
+        // 检查上传文件
+        message = checkFile(upFile);
+        if (message != null) return message;
+        message = checkFile(downFile);
+        if (message != null) return message;
+        try {
+            // 保存文件
+                    upPath = saveImg(upFile, accountInfo.getAccount(), PID_IMG_UP);
+                downPath = saveImg(upFile, accountInfo.getAccount(), PID_IMG_DOWN);
+                accountInfo.setPidUp(upPath);
+                accountInfo.setPidUp(downPath);
+                boolean isInput = accountMapper.inputAccountInfoPid(accountInfo);
+                if (isInput) {
+                message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_PID_SAVE_Y,Message.VALUE_CONTENT_ACCOUNT_PID_SAVE_Y);
+            } else {
+                message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_PID_SAVE_N,Message.VALUE_CONTENT_ACCOUNT_PID_SAVE_N);
+            }
+        } catch (Exception e) {
+            // 若有上传成功的删除掉
+            new File(upPath).deleteOnExit();
+            new File(downPath).deleteOnExit();
+            e.printStackTrace();
         }
         return message;
     }
@@ -89,7 +127,7 @@ public class DataServiceImpl implements DataService {
      */
     public Message checkFile(MultipartFile file) {
         if(file == null || file.isEmpty()) {
-            return Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_PID_SAVE_UP_E,Message.VALUE_CONTENT_ACCOUNT_PID_SAVE_UP_E);
+            return Message.createFailMessage(Message.VALUE_CODE_UPLOAD_FILE_N,Message.VALUE_CONTENT_UPLOAD_FILE_N);
         }
         return null;
     }
@@ -170,6 +208,86 @@ public class DataServiceImpl implements DataService {
             }
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_N,Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message inputAccountWorkInfo(AccountInfo accountInfo) {
+        boolean inputWorkInfo = accountMapper.inputWorkInfo(accountInfo);
+        Message message = null;
+        if (inputWorkInfo) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y);
+        } else {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_N,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_N);
+        }
+        return message;
+    }
+
+    @Override
+    @Transactional
+    public Message inputLinkmanArray(List<LinkMan> linkManArray,String acoount){
+        Message message = userService.checkAccount(acoount);
+        if (message.get(Message.KEY_STATUS).equals(Message.VALUE_STATUS_FAIL)) return message;
+        final int[] okSize = {0};
+        linkManArray.forEach(data -> {
+            data.setAccount(acoount);
+            AccountInfo accountInfo = accountMapper.getUseAccountByMobile(acoount);
+            data.setInfoID(accountInfo.getId());
+            System.err.println(data);
+            okSize[0] = okSize[0] + (accountMapper.inputAccountLinkMan(data) ? 1 : 0) ;
+        });
+        if (okSize[0] == linkManArray.size()) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y);
+        } else {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //手动开启事务回滚
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_N,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message inputAccountCard(AccountInfo accountInfo) {
+        Message message = userService.checkAccount(accountInfo.getAccount());
+        if (message.get(Message.KEY_STATUS).equals(Message.VALUE_STATUS_FAIL)) return message;
+        boolean inputCard = accountMapper.inputAccountCard(accountInfo);
+        if (inputCard) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y);
+        } else {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); //手动开启事务回滚
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_N,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message inputAccountInfo(AccountInfo accountInfo) {
+        Message message = userService.checkAccount(accountInfo.getAccount());
+        if (message.get(Message.KEY_STATUS).equals(Message.VALUE_STATUS_FAIL)) return message;
+        AccountInfo queryInfo = accountMapper.getUseAccountByMobile(accountInfo.getAccount());
+        boolean result = false;
+        if (queryInfo != null && queryInfo.getId() != 0) { //修改
+            result = accountMapper.updateAccountInfo(accountInfo);
+        } else { // 添加
+            result = accountMapper.inputAccountInfo(accountInfo);
+        }
+        if (result) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y);
+        } else {
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_N,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message searchAccountInfo(AccountInfo accountInfo) {
+        Message message = null;
+        List<AccountInfo> accountInfoList = accountMapper.queryAccountInfo(accountInfo);
+        if (accountInfoList != null && !accountInfoList.isEmpty()) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ORDER_QUERY_Y,Message.VALUE_CONTENT_ORDER_QUERY_Y);
+            message.put(Message.KEY_DATA,accountInfoList);
+        } else {
+            message = Message.createFailMessage(Message.VALUE_CODE_ORDER_QUERY_N,Message.VALUE_CONTENT_ORDER_QUERY_N);
         }
         return message;
     }
