@@ -2,6 +2,7 @@ package com.work.borrow.controller;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.work.borrow.mapper.AccountMapper;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.LinkMan;
 import com.work.borrow.po.Message;
@@ -93,6 +94,7 @@ public class AccountInfoController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String nowDate = simpleDateFormat.format(new Date()).toString();
         accountInfo.setStartTime(nowDate);
+        accountInfo.setStatus(AccountMapper.STATUS_WRIT);// 订单生效，开始审核
         return dataService.inputAccountInfo(accountInfo);
     }
 

@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 /**
  * 用户操作实现类
  */
@@ -20,12 +22,27 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountMapper accountMapperAutowired;
     @Autowired
     private SMSService smsService;
 
+    private static AccountMapper accountMapper;
+    @PostConstruct
+    public void init() {
+        accountMapper = accountMapperAutowired;
+    }
+
     @Override
     public Message checkAccount(String mobile) {
+        return checkAccountMobile(mobile);
+    }
+
+    /**
+     * 检验用户是否存在
+     * @param mobile
+     * @return
+     */
+    public static Message checkAccountMobile(String mobile) {
         Message message = null;
         boolean isHas = accountMapper.checkAccountByMobile(mobile);
         if(isHas) {
@@ -35,6 +52,8 @@ public class UserServiceImpl implements UserService{
         }
         return message;
     }
+
+
 
     @Override
     public Message changePass(Account account) {

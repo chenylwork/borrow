@@ -11,6 +11,14 @@ public class LinkMan {
     private String name; // 联系人名称
     private String relation; // 联系人关系
 
+    public LinkMan() {
+    }
+
+    public LinkMan(int infoID, String account) {
+        this.infoID = infoID;
+        this.account = account;
+    }
+
     public int getId() {
         return id;
     }

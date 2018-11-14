@@ -4,7 +4,6 @@ import com.work.borrow.mapper.sql.provider.AccountSqlProvider;
 import com.work.borrow.po.Account;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.LinkMan;
-import com.work.borrow.util.Page;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -124,8 +123,23 @@ public interface AccountMapper {
     @Select("SELECT * FROM account_info WHERE account = #{account} AND status = '"+STATUS_OPEN+"' limit 1;")
     public AccountInfo getUseAccountByMobile(@Param("account") String account);
 
+    /**
+     * 查询linkman信息
+     * @param linkMan
+     * @return
+     */
+    @Select("select * from linkman where account = #{account} and infoID = #{infoID};")
+    List<LinkMan> searchLinkman(LinkMan linkMan);
 
+    /**
+     *
+     * @param linkMan
+     * @return
+     */
+    @Delete("DELETE from linkman where account = #{account} and infoID = #{infoID};")
+    boolean deleteLinkMan(LinkMan linkMan);
 
+    /*********************************************************************************/
     /**
      * 添加详细信息
      * @param account 账户信息

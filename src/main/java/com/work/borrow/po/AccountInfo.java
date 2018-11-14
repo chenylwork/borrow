@@ -35,8 +35,7 @@ public class AccountInfo {
     private String paymentCode; // 付款单号
     private String life; // 借款期限
     private String startTime; // 开始时间
-    private String assess; // 是否审核
-    private String status; // 状态：正在使用，已经过期（已还款）
+    private String status; // 信息状态
 
     public Integer getId() {
         return id;
@@ -150,14 +149,6 @@ public class AccountInfo {
         this.paymentCode = paymentCode;
     }
 
-    public String getAssess() {
-        return assess;
-    }
-
-    public void setAssess(String assess) {
-        this.assess = assess;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -201,7 +192,6 @@ public class AccountInfo {
                 ", paymentCode='" + paymentCode + '\'' +
                 ", life='" + life + '\'' +
                 ", startTime='" + startTime + '\'' +
-                ", assess='" + assess + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

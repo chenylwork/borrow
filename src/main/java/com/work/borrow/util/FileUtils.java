@@ -2,6 +2,7 @@ package com.work.borrow.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.work.borrow.po.Pid;
 import com.work.borrow.util.baidu.AuthService;
 import com.work.borrow.util.baidu.Base64Util;
 import com.work.borrow.util.baidu.HttpUtil;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 
 /**
@@ -33,6 +35,21 @@ public class FileUtils {
     @PostConstruct
     private void init() {
         this.resourceLoader = resourceLoaderAutowired;
+    }
+
+    /**
+     *
+     * @param path
+     * @return
+     */
+    public static InputStream config(String path) {
+        InputStream inputStream = null;
+        try {
+            inputStream = resourceLoader.getResource("classpath:"+path).getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return inputStream;
     }
     
     /**
@@ -53,7 +70,8 @@ public class FileUtils {
      * @param byteArray 身份证文件字节数组
      * @return
      */
-    public static String IdentificationCard(byte[] byteArray){
+    public static Pid IdentificationCard(byte[] byteArray){
+        Pid pid = null;
         // 身份证识别url
         String idcardIdentificate = "https://aip.baidubce.com/rest/2.0/ocr/v1/idcard";
         // 本地图片路径
@@ -72,11 +90,12 @@ public class FileUtils {
 //            String accessToken = "#####调用鉴权接口获取的token#####";
             String accessToken = AuthService.getAuth();//"24.d7f18154ed9d66c7189af50a05027ffe.2592000.1544145536.282335-14699690";
             result = HttpUtil.post(idcardIdentificate, accessToken, params);
-            System.out.println(result);
+            pid = JsonUtils.readerPid(result);
+            logger.info("读取的身份证信息："+result);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return pid;
     }
 
     /**
@@ -87,7 +106,7 @@ public class FileUtils {
         String result = "";
         ObjectMapper mapper = new ObjectMapper();
         try {
-            JsonNode jsonNode = mapper.readTree(resourceLoader.getResource("classpath:bank.json").getInputStream());
+            JsonNode jsonNode = mapper.readTree(config("bank.json"));
             JsonNode bankNode = jsonNode.get(bankAlias);
             result = bankNode.textValue();
         } catch (IOException e) {

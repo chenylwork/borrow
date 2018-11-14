@@ -11,6 +11,7 @@ import com.work.borrow.service.OrderService;
 import com.work.borrow.service.SMSService;
 import com.work.borrow.serviceImpl.MailService;
 import com.work.borrow.util.FileUtils;
+import com.work.borrow.util.JsonUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,8 +27,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class BorrowApplicationTests {
 	@Autowired
 	private SMSService smsService;
@@ -104,6 +105,10 @@ public class BorrowApplicationTests {
     public void loadFile() {
         String bankName = FileUtils.getBankName("ICBC");
         System.err.println(bankName);
+    }
+    @Test
+    public void readPid() {
+        JsonUtils.readerPid("");
     }
 
 
