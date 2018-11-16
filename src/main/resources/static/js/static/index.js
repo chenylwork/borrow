@@ -8,15 +8,23 @@ $(function () {
 function pageSearchAccount() {
     searchAccount($("#pageNo").val(),$("#length").val());
 }
+
+/**
+ * 数据列表点击方法
+ * @param id
+ */
+function infoClickFunction(id) {
+    window.location.href = url_m.prefic+"/info.html?id="+id;
+}
 // 获取数据并填充
 function searchAccount(pageNo,length) {
     $.ajax({
-        url:url_m.prefic+"account/search",
+        url:url_m.prefic+"/account/info/search",
         data:{
-            "mobile":$("#mobile").val(),
+            "account":$("#mobile").val(),
             "name":$("#name").val(),
             "pid":$("#pid").val(),
-            "check":$("#check").val(),
+            "status":$("#status").val(),
             "no":pageNo,
             "length":length
         },
@@ -28,13 +36,12 @@ function searchAccount(pageNo,length) {
                     "<tr>" +
                     "<th>手机号码</th>\n" +
                     "<th>姓名</th>\n" +
-                    "<th>性别</th>\n" +
+                    "<th>借款金额</th>\n" +
                     "<th>身份证号</th>\n" +
-                    "<th>放贷情况</th>\n" +
+                    "<th>付款方式</th>\n" +
                     "<th>年收入</th>\n" +
                     "<th>工作年限</th>\n" +
-                    "<th>快速审核</th>\n" +
-                    "<th>审核状态</th>\n" +
+                    "<th>信息状态</th>\n" +
                     "</tr>\n" +
                     "</thead>";
                 initHtml += "<tbody>";
@@ -53,25 +60,23 @@ function searchAccount(pageNo,length) {
                             loan = "有房无贷";
                             break;
                     }
-                    initHtml += "<tr>\n" +
-                        "<td>"+dataArray[i].mobile+"</td>\n" +
+                    initHtml += "<tr class='info_tr' onclick='infoClickFunction("+dataArray[i].infoID+")'>\n" +
+                        "<td>"+dataArray[i].account+"</td>\n" +
                         "<td>"+dataArray[i].name+"</td>\n" +
-                        "<td>"+dataArray[i].sex+"</td>\n" +
+                        "<td>"+dataArray[i].borrow+"</td>\n" +
                         "<td>"+dataArray[i].pid+"</td>\n" +
-                        "<td>"+loan+"</td>\n" +
+                        "<td>"+dataArray[i].payment+"</td>\n" +
                         "<td>"+dataArray[i].income+"</td>\n" +
-                        "<td>"+dataArray[i].workTime+"</td>\n" +
-                        "<td>"+((dataArray[i].fast == 1) ? "是" : "否") +"</td>\n" +
+                        "<td>"+dataArray[i].workTime+"年</td>\n" +
                         "<td>\n" +
-                        "<button class=\"btn btn-primary btn-xs\" data-loading-text=\"Loading...\"\n" +
-                        "type=\"button\"> 待审核\n" +
-                        "</button>\n" +
+                        $("#status_"+dataArray[i].status).prop("outerHTML") +
                         "</td>\n" +
                         "</tr>";
                 }
                 /****************数据部分***************/
                 initHtml += "</tbody>";
                 initHtml += "</div>";
+                $("#message").text("");
                 $("#table-box").append(initHtml);
                 console.log(data);
                 pagintor(data.data.no,data.data.pages);

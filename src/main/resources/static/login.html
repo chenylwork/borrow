@@ -14,7 +14,7 @@
 <div id="particles-js">
     <div class="login">
         <div class="login-top">
-            登录
+            易贷王管理登录
         </div>
         <div class="login-center clearfix">
             <div class="login-center-img"><img src="img/name.png"/></div>
@@ -81,10 +81,10 @@
 </script>
 <script>
     $("#login-btn").click(function () {
-        console.log(myobj.url+"login/pass");
+        console.log(url_m.prefic+"/admin/login");
         $.ajax({
-            url:myobj.url+"login/pass",
-            data:{"mobile":$("#mobile").val(),"password":$("#password").val()},
+            url:url_m.prefic+"/admin/login",
+            data:{"username":$("#mobile").val(),"password":$("#password").val()},
             jsonp:"callback",
             success:function(data){
                 console.log(data.status == 1 || data.status == "1");

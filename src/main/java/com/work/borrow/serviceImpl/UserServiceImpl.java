@@ -153,16 +153,4 @@ public class UserServiceImpl implements UserService{
         return message;
     }
 
-    @Override
-    public Message getAccountInfo(String mobile) {
-        Message message = null;
-        AccountInfo accountInfo = accountMapper.getUseAccountByMobile(mobile);
-        if(accountInfo != null && accountInfo.getId() != null ) {
-            message = Message.createSuccessMessage();
-            message.put(Message.KEY_DATA,accountInfo);
-        } else {
-            message = Message.createFailMessage();
-        }
-        return message;
-    }
 }

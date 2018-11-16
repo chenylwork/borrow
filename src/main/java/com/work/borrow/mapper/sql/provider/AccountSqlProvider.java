@@ -52,16 +52,16 @@ public class AccountSqlProvider {
     }
     /**
      * 查询数据个数语句
-     * @param map
+     * @param accountInfo
      * @return
      */
-    public String querySizeSql(Map<String,Object> map) {
-        AccountInfo accountInfo = null;
-        Page page = null;
-        StringBuffer stringBuffer = new StringBuffer("select count(id) from info where 1=1 ");
-        if (map != null && ((accountInfo = (AccountInfo)map.get("account")) != null) ){
-            stringBuffer.append(whereSql(accountInfo)).append(mysqlPageSql(page));
-        }
+    public String querySizeSql(AccountInfo accountInfo) {
+        Class<? extends AccountInfo> accountInfoClass = accountInfo.getClass();
+        // 获取数据表名称
+        Table table = accountInfoClass.getAnnotation(Table.class);
+        String tableName = table.value();
+        StringBuffer stringBuffer = new StringBuffer("select count(id) from "+tableName+" where 1=1 ");
+        stringBuffer.append(whereSql(accountInfo));
         logger.info("查询语句："+stringBuffer);
         return stringBuffer.toString();
     }
@@ -91,8 +91,8 @@ public class AccountSqlProvider {
      */
     public String mysqlPageSql(Page page) {
         if (page == null || page.getNo() == 0 || page.getLength() == 0) return "";
-        int start = page.getNo() * page.getLength();
-        int end = (page.getNo()+1) * page.getLength();
+        int start = (page.getNo() - 1)  * page.getLength();
+        int end = page.getNo() * page.getLength();
         return (" limit "+start+","+end);
     }
 
@@ -130,10 +130,12 @@ public class AccountSqlProvider {
 
     /**
      * 查询用户详细信息sql
-     * @param accountInfo
+     * @param map
      * @return
      */
-    public String queryAccountInfosql(AccountInfo accountInfo) throws Exception{
+    public String queryAccountInfosql(Map<String,Object> map) throws Exception{
+        AccountInfo accountInfo = (AccountInfo)map.get(AccountMapper.ACCOUNT_INFO_PREFIX);
+        Page page = (Page) map.get("page");
         StringBuffer whereBuffer = new StringBuffer();
         Class<? extends AccountInfo> accountInfoClass = accountInfo.getClass();
         // 获取数据表名称
@@ -146,15 +148,45 @@ public class AccountSqlProvider {
             field.setAccessible(true);
             Rid ridAnnotation = field.getAnnotation(Rid.class);
             if (ridAnnotation == null) {
-                if (field.get(accountInfo) != null) {
-                    whereBuffer.append(" `"+field.getName()+"` = #{"+field.getName()+"} and");
+                if (!fieldValueIsEmpty(field,accountInfo)) {
+                    whereBuffer.append(" `"+field.getName()+"` = #{"+AccountMapper.ACCOUNT_INFO_PREFIX+"."+field.getName()+"} and");
                 }
             }
         }
-        String where = whereBuffer.substring(0,whereBuffer.lastIndexOf("and"));
-        String querySql = "select * from "+tableName+" where"+where;
+        String where = "";
+        if (whereBuffer.length() > 0) {
+            where = " where "+whereBuffer.substring(0,whereBuffer.lastIndexOf("and"));
+        }
+        String querySql = "select * from "+tableName+where+mysqlPageSql(page);
         logger.info(querySql);
         return querySql;
+    }
+
+    /**
+     * 判断字段是否为空
+     * @param field
+     * @param t
+     * @param <T>
+     * @return
+     */
+    private <T> boolean fieldValueIsEmpty(Field field,T t) {
+        // 获取字段类型
+        String fieldType = field.getType().getSimpleName();
+        // 获取字段值
+        try {
+            if (field.get(t) == null) {
+                return true;
+            }
+            if (fieldType.equals("int") && field.get(t).equals(0)) {
+                return true;
+            }
+            if (fieldType.equals("String") && field.get(t).equals("")) {
+                return true;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 
     /**

@@ -43,5 +43,6 @@ public interface MessageCode {
     String VALUE_CODE_UPLOAD_FILE_N = "12050"; // 上传的文件为null
     String VALUE_CODE_ACCOUNT_INFO_INPUT_Y = "12060"; // 用户认证信息录入成功
     String VALUE_CODE_ACCOUNT_INFO_INPUT_N = "12061"; //用户认证信息录入失败
+    String VALUE_CODE_ACCOUNT_INFO_INPUT_PID_N = "12070"; // 不是身份证信息
 
 }

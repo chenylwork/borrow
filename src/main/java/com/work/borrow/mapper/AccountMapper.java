@@ -4,6 +4,7 @@ import com.work.borrow.mapper.sql.provider.AccountSqlProvider;
 import com.work.borrow.po.Account;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.LinkMan;
+import com.work.borrow.util.Page;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ import java.util.Map;
 @Mapper
 @Component("accountMapper")
 public interface AccountMapper {
+    String ACCOUNT_INFO_PREFIX = "account";
+    String PAGE_ALIAS = "page";
     String STATUS_OPEN = "0"; // 借款信息开始录入，还没录入结束
     String STATUS_WRIT = "1"; // 借款信息录入结束，等待审核
     String STATUS_START = "2"; // 审核结束，等待还款状态
@@ -110,11 +113,11 @@ public interface AccountMapper {
 
     /**
      * 查询用户信息
-     * @param accountInfo
+     * @param map
      * @return
      */
     @SelectProvider(type = AccountSqlProvider.class,method = "queryAccountInfosql")
-    public List<AccountInfo> queryAccountInfo(AccountInfo accountInfo);
+    public List<AccountInfo> queryAccountInfo(Map<String,Object> map);
     /**
      * 获取当前使用的实名信息
      * @param account 用户手机号
@@ -138,6 +141,7 @@ public interface AccountMapper {
      */
     @Delete("DELETE from linkman where account = #{account} and infoID = #{infoID};")
     boolean deleteLinkMan(LinkMan linkMan);
+
 
     /*********************************************************************************/
     /**
@@ -212,9 +216,9 @@ public interface AccountMapper {
 
     /**
      * 查询个数
-     * @param map
+     * @param accountInfo
      * @return
      */
     @SelectProvider(type=AccountSqlProvider.class,method = "querySizeSql")
-    public int size(Map<String,Object> map);
+    public int size(AccountInfo accountInfo);
 }

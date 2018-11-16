@@ -27,8 +27,10 @@ public class DataServiceImpl implements DataService {
     @Autowired
     private UserService userService;
 
-    @Value("${pid.img.file.path}")
+    @Value("${pid.img.file.save.path}")
     private String filePath;
+    @Value("${pid.img.file.visit.path.prefix}")
+    private String visitPath;
 
     @Override
     public Message uploadPidUpImg(MultipartFile upFile, String mobile) {
@@ -74,11 +76,17 @@ public class DataServiceImpl implements DataService {
         if (message != null) return message;
         try {
             Pid pid = FileUtils.IdentificationCard(upFile.getBytes());
+            if (pid == null) return Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_PID_N,Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_PID_N);
             // 保存文件
             upPath = saveImg(upFile, accountInfo.getAccount(), PID_IMG_UP);
             downPath = saveImg(downFile, accountInfo.getAccount(), PID_IMG_DOWN);
+            // 保存身份证信息
             accountInfo.setPidUp(upPath);
             accountInfo.setPidDown(downPath);
+            accountInfo.setName(pid.getName());
+            accountInfo.setSex(pid.getSex());
+            accountInfo.setPid(pid.getCode());
+            accountInfo.setAddress(pid.getAddress());
             message = inputInfo(accountInfo);
         } catch (Exception e) {
             // 若有上传成功的删除掉
@@ -153,29 +161,31 @@ public class DataServiceImpl implements DataService {
      * @see DataService 下的常亮参数
      */
     public String saveFile(String mobile, InputStream inputStream, String fileType, String upOrDown) {
+        StringBuffer result = new StringBuffer();
         // 获取时间戳
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        // 获取文件
+        // 获取文件前缀
         StringBuffer imgPath = new StringBuffer(filePath);
         char lastChar = filePath.charAt(filePath.length() - 1);
         if (!"/".equals(lastChar) || !"\\".equals(lastChar)) {
             imgPath.append("/");
         }
-        imgPath.append(calendar.get(Calendar.YEAR) + "/");
-        imgPath.append(calendar.get(Calendar.MONTH) + "/");
-        imgPath.append(calendar.get(Calendar.DAY_OF_MONTH) + "/");
-        imgPath.append(mobile + "/");
-        imgPath.append(mobile + "_" + upOrDown + "." + fileType);
-        File file = com.work.borrow.util.FileUtils.createFile(imgPath.toString());
+        result.append(calendar.get(Calendar.YEAR) + "/");
+        result.append(calendar.get(Calendar.MONTH) + "/");
+        result.append(calendar.get(Calendar.DAY_OF_MONTH) + "/");
+        result.append(mobile + "/");
+        result.append(mobile + "_" + upOrDown + "." + fileType);
+
+        File file = com.work.borrow.util.FileUtils.createFile(imgPath.append(result).toString());
         try {
             OutputStream outputStream = new FileOutputStream(file);
             FileCopyUtils.copy(inputStream, outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return imgPath.toString();
+        return visitPath+"/"+result.toString();
     }
 
     @Override
@@ -190,28 +200,28 @@ public class DataServiceImpl implements DataService {
         return message;
     }
 
-    @Override
-    public Message getAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
-        Message message = null;
-        Map<String, Object> param = new HashMap<>();
-        param.put("account", accountInfo);
-        param.put("page", page);
-        List<AccountInfo> accountList = accountMapper.searchAccountInfo(param);
-        if (accountList != null && !accountList.isEmpty()) {
-            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_Y, Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_Y);
-            if (page != null && page.getNo() != 0) {
-                // 获取共个数
-                page.setData(accountList);
-                page.setSize(accountMapper.size(param));
-                message.put(Message.KEY_DATA, page);
-            } else {
-                message.put(Message.KEY_DATA, accountList);
-            }
-        } else {
-            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_N, Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_N);
-        }
-        return message;
-    }
+//    @Override
+//    public Message getAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
+//        Message message = null;
+//        Map<String, Object> param = new HashMap<>();
+//        param.put("account", accountInfo);
+//        param.put("page", page);
+//        List<AccountInfo> accountList = accountMapper.searchAccountInfo(param);
+//        if (accountList != null && !accountList.isEmpty()) {
+//            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_Y, Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_Y);
+//            if (page != null && page.getNo() != 0) {
+//                // 获取共个数
+//                page.setData(accountList);
+//                page.setSize(accountMapper.size(accountInfo));
+//                message.put(Message.KEY_DATA, page);
+//            } else {
+//                message.put(Message.KEY_DATA, accountList);
+//            }
+//        } else {
+//            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_SEARCH_N, Message.VALUE_CONTENT_ACCOUNT_INFO_SEARCH_N);
+//        }
+//        return message;
+//    }
 
     @Override
     public Message inputAccountWorkInfo(AccountInfo accountInfo) {
@@ -224,7 +234,8 @@ public class DataServiceImpl implements DataService {
         Message message = userService.checkAccount(acoount);
         if (message.get(Message.KEY_STATUS).equals(Message.VALUE_STATUS_FAIL)) return message;
         final int[] okSize = {0};
-        // 获取实名信息id
+        // 《《《《《《《《《《《《》》》》》》》》》》》》》》》》
+        // 获取实名信息id,如果没有状态为待审核之前的信息就会引发错误
         AccountInfo accountInfo = accountMapper.getUseAccountByMobile(acoount);
         // 获取已经添加的实名认证的信息的电话联系人，存在就删除
         LinkMan linkMan = new LinkMan(accountInfo.getId(), acoount);
@@ -256,12 +267,22 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Message searchAccountInfo(AccountInfo accountInfo) {
+    public Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page) {
         Message message = null;
-        List<AccountInfo> accountInfoList = accountMapper.queryAccountInfo(accountInfo);
-        if (accountInfoList != null && !accountInfoList.isEmpty()) {
+        Map<String,Object> map = new HashMap<>();
+        map.put(AccountMapper.ACCOUNT_INFO_PREFIX,accountInfo);
+        map.put(AccountMapper.PAGE_ALIAS,page);
+        List<AccountInfo> accountList = accountMapper.queryAccountInfo(map);
+        if (accountList != null && !accountList.isEmpty()) {
             message = Message.createSuccessMessage(Message.VALUE_CODE_ORDER_QUERY_Y, Message.VALUE_CONTENT_ORDER_QUERY_Y);
-            message.put(Message.KEY_DATA, accountInfoList);
+            if (page != null && page.getNo() != 0 && page.getLength() != 0) {
+                page.setData(accountList);
+                // 获取共个数
+                page.setSize(accountMapper.size(accountInfo));
+                message.put(Message.KEY_DATA, page);
+            } else {
+                message.put(Message.KEY_DATA, accountList);
+            }
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ORDER_QUERY_N, Message.VALUE_CONTENT_ORDER_QUERY_N);
         }

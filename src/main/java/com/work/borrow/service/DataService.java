@@ -50,12 +50,12 @@ public interface DataService {
      */
     public Message setFast(String mobile,String id);
 
-    /**
-     * 查询用户详情信息
-     * @param accountInfo 查询条件
-     * @return
-     */
-    public Message getAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
+//    /**
+//     * 查询用户详情信息
+//     * @param accountInfo 查询条件
+//     * @return
+//     */
+//    public Message getAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
 
     /**
      * 录入工作信息
@@ -90,6 +90,6 @@ public interface DataService {
      * @param accountInfo
      * @return
      */
-    Message searchAccountInfo(AccountInfo accountInfo);
+    Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
 
 }

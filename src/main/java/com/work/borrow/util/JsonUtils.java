@@ -35,6 +35,7 @@ public class JsonUtils {
             pid = new Pid(address,birth,name,code,sex,nation);
             logger.info("json转换的身份证对象："+pid.toString());
         } catch (IOException e) {
+            logger.error("json转换身份证对象失败！！！！！！！！！！");
             e.printStackTrace();
         }
         return pid;

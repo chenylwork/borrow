@@ -7,6 +7,7 @@ import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.LinkMan;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
+import com.work.borrow.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,16 +50,22 @@ public class AccountInfoController {
 
     /**
      * 录入紧急联系人
-     * @param map 紧急联系人数组
+     * @param account 用户手机号
+     * @param info 联系人信息数组字符串
      * @return
      */
     @RequestMapping("/input/linkman")
-    public Message inputLinkMan(@RequestBody Map<String,Object> map) throws Exception {
-        String account = (String)map.get("account");
-        Object linkMans = map.get("linkMans");
-        ObjectMapper mapper = new ObjectMapper();
-        JavaType jt = mapper.getTypeFactory().constructParametricType(ArrayList.class, LinkMan.class);
-        List<LinkMan> linkManList = mapper.readValue(mapper.writeValueAsString(linkMans), jt);
+    public Message inputLinkMan(String account,String info) throws Exception {
+        List<LinkMan> linkManList = new ArrayList<>();
+        String[] linkMans = info.split(";");
+        for (String linkManBuffer : linkMans) {
+            LinkMan linkMan = new LinkMan();
+            String[] params = linkManBuffer.split(",");
+            linkMan.setMobile(params[0]);
+            linkMan.setName(params[1]);
+            linkMan.setRelation(params[2]);
+            linkManList.add(linkMan);
+        }
         return dataService.inputLinkmanArray(linkManList,account);
     }
 
@@ -73,6 +80,11 @@ public class AccountInfoController {
     public Message uploadPid(AccountInfo account, MultipartFile up, MultipartFile down) {
         return dataService.uploadPidImg(up,down,account);
     }
+//    @RequestMapping("/upload/pid/s")
+//    public Message uploadPidByBuffer(AccountInfo account, String up, String down) {
+//        Fil
+//        return dataService.uploadPidImg(up,down,account);
+//    }
 
     /**
      * 录入借款金额
@@ -104,16 +116,15 @@ public class AccountInfoController {
      * @return
      */
     @RequestMapping("/search")
-    public Message searchAccountInfo(AccountInfo accountInfo) {
-        return dataService.searchAccountInfo(accountInfo);
+    public Message searchAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
+        return dataService.searchAccountInfo(accountInfo,page);
     }
-
     /**
      * 查询订单信息
      * @param accountInfo
      * @return
      */
-    @RequestMapping("/search/account/order")
+    @RequestMapping("/search/order")
     public Message searchAccountOrder(AccountInfo accountInfo) {
         return null;
     }

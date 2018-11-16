@@ -31,7 +31,7 @@ public interface MessageContent {
     String VALUE_CONTENT_ORDER_MONEY_UPDATE_Y = "还款成功"; // 订单还款成功
     String VALUE_CONTENT_ORDER_MONEY_UPDATE_N = "还款失败"; // 订单还款失败
     String VALUE_CONTENT_ORDER_QUERY_Y = "查询成功"; // 订单查询成功
-    String VALUE_CONTENT_ORDER_QUERY_N = "查询失败"; // 订单查询失败
+    String VALUE_CONTENT_ORDER_QUERY_N = "没有您需要查询的信息！！！"; // 订单查询失败
     String VALUE_CONTENT_SMS_SEND_MOBILE_N = "手机号为空";
 
     String VALUE_CONTENT_ACCOUNT_FAST_SET_Y = "已开启快速审核"; // 开启快速审核成功
@@ -43,4 +43,5 @@ public interface MessageContent {
     String VALUE_CONTENT_UPLOAD_FILE_N = "请选择上传文件"; //
     String VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y = "信息录入成功"; //
     String VALUE_CONTENT_ACCOUNT_INFO_INPUT_N = "信息录入失败"; //
+    String VALUE_CONTENT_ACCOUNT_INFO_INPUT_PID_N = "请上传正确的身份证正面照";
 }

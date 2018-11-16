@@ -10,6 +10,10 @@
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+    <style>
+        .button-box{width: 0;height: 0;margin: 0;padding: 0; overflow: hidden;}
+        .alert{margin-bottom: 0px; padding: 5px;}
+    </style>
 </head>
 <body>
 <div class="page-header text-center">
@@ -18,16 +22,21 @@
 <div class="container">
     <form class="" role="form">
         <input type="hidden" value="1" id="pageNo" />
-        <input type="hidden" value="2" id="length" />
+        <input type="hidden" value="5" id="length" />
         <div class="container">
             <div class="row">
                 <!--下拉框-->
                 <div class="form-group col-lg-2">
                     <div class="input-group">
-                        <span class="input-group-addon">审核状态</span>
-                        <select class="form-control" id="check">
-                            <option value="0">待审核</option>
-                            <option value="1">已审核</option>
+                        <span class="input-group-addon">状态</span>
+                        <select class="form-control" id="status" name="status">
+                            <option value="">全部</option>
+                            <option value="0">待完善</option>
+                            <option value="1">待审核</option>
+                            <option value="2">待还款</option>
+                            <option value="3">已逾期</option>
+                            <option value="4">已还款</option>
+                            <option value="5">被驳回</option>
                         </select>
                     </div>
                 </div>
@@ -58,10 +67,19 @@
                 </div>
             </div>
         </div>
-    </form><br>
-    <h1 id="message"></h1>
+    </form>
+    <div class="button-box">
+        <button id="status_0" type="button" class="alert alert-success" style="background-color:#afafaf;color:grey;">待完善</button>
+        <button id="status_1" type="button" class="alert alert-warning">待审核</button>
+        <button id="status_2" type="button" class="alert alert-success">待还款</button>
+        <button id="status_3" type="button" class="alert alert-info">已还款</button>
+        <button id="status_4" type="button" class="alert alert-danger">被驳回</button>
+    </div>
+    <br>
+    <h1 id="message" align="center"></h1>
     <div id="table-box"></div>
 </div>
+
 <div class="container">
     <div id="example" style="text-align: center">
         <ul id="pageLimit"></ul>
@@ -69,5 +87,5 @@
 </div>
 </body>
 <script src="js/myApp.js" type="text/javascript"></script>
-<script src="js/static/index.js" type="text/javascript"></script>
+<script src="js/static/index.js?v=201811150950" type="text/javascript"></script>
 </html>

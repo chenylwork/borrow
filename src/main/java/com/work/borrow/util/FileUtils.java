@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 
 /**
@@ -50,6 +51,9 @@ public class FileUtils {
             e.printStackTrace();
         }
         return inputStream;
+    }
+    public static ResourceLoader getResourceLoader() {
+        return resourceLoader;
     }
     
     /**
@@ -90,8 +94,8 @@ public class FileUtils {
 //            String accessToken = "#####调用鉴权接口获取的token#####";
             String accessToken = AuthService.getAuth();//"24.d7f18154ed9d66c7189af50a05027ffe.2592000.1544145536.282335-14699690";
             result = HttpUtil.post(idcardIdentificate, accessToken, params);
-            pid = JsonUtils.readerPid(result);
             logger.info("读取的身份证信息："+result);
+            pid = JsonUtils.readerPid(result);
         } catch (Exception e) {
             e.printStackTrace();
         }

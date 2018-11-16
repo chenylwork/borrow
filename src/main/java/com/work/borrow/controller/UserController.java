@@ -16,6 +16,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/admin/login")
+    public Message adminLogin(String username,String password) {
+        Message message = null;
+        if ((username != null && "admin".equals(username)) && (password != null && "admin".equals(password))) {
+            message = Message.createSuccessMessage();
+        } else {
+            message = Message.createFailMessage();
+            message.put(Message.KEY_CONTENT,"请输入正确的登录信息！！！");
+        }
+        return message;
+    }
+
     /**
      * 密码登录
      * @param
@@ -96,11 +108,6 @@ public class UserController {
     @RequestMapping("/real/account")
     public Message realAccount(AccountInfo account) {
         return userService.realAccount(account);
-    }
-
-    @RequestMapping("/search/account/info")
-    public Message getInfo(String mobile) {
-        return userService.getAccountInfo(mobile);
     }
 
 }

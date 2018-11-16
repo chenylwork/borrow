@@ -3,16 +3,43 @@ package com.work.borrow.controller;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
+import com.work.borrow.util.FileUtils;
 import com.work.borrow.util.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @RestController
 public class DataController {
     @Autowired
     private DataService dataService;
+
+    /**
+     * 上传管理员文件
+     * @param file
+     * @return
+     */
+    @RequestMapping("/upload/admin/img/{name}")
+    public Message uploadAdminQRImg(MultipartFile file,@Param("name") String name) {
+        String fileName = "";
+        if ("ali".equals(name)) fileName = "";
+        if ("wx".equals(name)) fileName = "";
+        if ("kf".equals(name)) fileName = "";
+        try {
+            File imgFile = FileUtils.getResourceLoader().getResource("classpath:/static/img/"+fileName+".jpg").getFile();
+            FileCopyUtils.copy(file.getInputStream(),new FileOutputStream(imgFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 上传身份证正反面图片
@@ -44,13 +71,4 @@ public class DataController {
     @RequestMapping("/account/check/fast")
     public Message changeFast(String mobile,String info){return dataService.setFast(mobile, info);}
 
-    /**
-     * 获取用户详情
-     * @param accountInfo 用户详情查询信息
-     * @return
-     */
-    @RequestMapping("/account/search")
-    public Message searchAccountInfo(AccountInfo accountInfo, Page page) {
-        return dataService.getAccountInfo(accountInfo,page);
-    }
 }

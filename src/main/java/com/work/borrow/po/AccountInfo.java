@@ -14,9 +14,13 @@ import org.apache.ibatis.annotations.Result;
 @Table("account_info")
 public class AccountInfo {
     @JsonProperty("infoID")
-    @Rid
     private Integer id; // 用户编号
     private String account; // 手机号
+    // 身份证信息
+    private String name; // 姓名
+    private String sex; // 性别
+    private String pid; // 身份证号
+    private String address; // 户口所在地
 
     private String workName; // 工作公司名称
     private String workPhone; // 工作公司电话
@@ -51,6 +55,38 @@ public class AccountInfo {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getWorkName() {
@@ -178,6 +214,10 @@ public class AccountInfo {
         return "AccountInfo{" +
                 "id=" + id +
                 ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", pid='" + pid + '\'' +
+                ", address='" + address + '\'' +
                 ", workName='" + workName + '\'' +
                 ", workPhone='" + workPhone + '\'' +
                 ", workAddress='" + workAddress + '\'' +
