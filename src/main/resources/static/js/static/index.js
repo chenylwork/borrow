@@ -62,12 +62,12 @@ function searchAccount(pageNo,length) {
                     }
                     initHtml += "<tr class='info_tr' onclick='infoClickFunction("+dataArray[i].infoID+")'>\n" +
                         "<td>"+dataArray[i].account+"</td>\n" +
-                        "<td>"+dataArray[i].name+"</td>\n" +
-                        "<td>"+dataArray[i].borrow+"</td>\n" +
-                        "<td>"+dataArray[i].pid+"</td>\n" +
-                        "<td>"+dataArray[i].payment+"</td>\n" +
-                        "<td>"+dataArray[i].income+"</td>\n" +
-                        "<td>"+dataArray[i].workTime+"年</td>\n" +
+                        "<td>"+(dataArray[i].name == null ? "待录入" : dataArray[i].name)+"</td>\n" +
+                        "<td>"+(dataArray[i].borrow == null ? "待录入" : dataArray[i].borrow)+"</td>\n" +
+                        "<td>"+(dataArray[i].pid == null ? "待录入" : dataArray[i].pid)+"</td>\n" +
+                        "<td>"+(dataArray[i].payment == null ? "待录入" : dataArray[i].payment)+"</td>\n" +
+                        "<td>"+(dataArray[i].income == null? "待录入" : dataArray[i].income)+"</td>\n" +
+                        "<td>"+(dataArray[i].workTime == null? "待录入" : dataArray[i].workTime)+"年</td>\n" +
                         "<td>\n" +
                         $("#status_"+dataArray[i].status).prop("outerHTML") +
                         "</td>\n" +
