@@ -281,7 +281,11 @@ public class DataServiceImpl implements DataService {
                 page.setSize(accountMapper.size(accountInfo));
                 message.put(Message.KEY_DATA, page);
             } else {
-                message.put(Message.KEY_DATA, accountList);
+                if (accountList.size() > 1) {
+                    message.put(Message.KEY_DATA, accountList);
+                } else {
+                    message.put(Message.KEY_DATA, accountList.get(0));
+                }
             }
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ORDER_QUERY_N, Message.VALUE_CONTENT_ORDER_QUERY_N);
@@ -308,6 +312,31 @@ public class DataServiceImpl implements DataService {
             message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_Y, Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y);
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_INPUT_N, Message.VALUE_CONTENT_ACCOUNT_INFO_INPUT_N);
+        }
+        return message;
+    }
+
+    @Override
+    public Message getUnOkInfo(String account) {
+        Message message = null;
+        AccountInfo accountInfo = accountMapper.getAccountStartStatus(account);
+        if (accountInfo != null) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_FINASH_N,Message.VALUE_CONTENT_ACCOUNT_INFO_FINASH_N);
+            message.put(Message.KEY_DATA,accountInfo.getStatus());
+        } else {
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_FINASH_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_FINASH_Y);
+        }
+        return message;
+    }
+
+    @Override
+    public Message inputStatus(AccountInfo accountInfo) {
+        Message message = null;
+        boolean updateStatus = accountMapper.updateStatus(accountInfo);
+        if (updateStatus) {
+            message = Message.createSuccessMessage();
+        } else {
+            message = Message.createFailMessage();
         }
         return message;
     }

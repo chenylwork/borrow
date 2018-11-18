@@ -39,10 +39,30 @@
         }
         p{margin: 0 0 45px;}
         .img{transform: rotate(-90deg);}
+        #head{font-size: 25px;margin-top: 35px;}
     </style>
 </head>
 <body>
-<h1 align="center">用户借款信息</h1><br>
+<div class="container">
+    <div class="row" id="head">
+        <div class="col-lg-2">
+            状态
+            <select id="account_status">
+                <option value="0">待完善</option>
+                <option value="1">待审核</option>
+                <option value="2">待还款</option>
+                <option value="3">已还款</option>
+                <option value="4">已逾期</option>
+                <option value="5">被驳回</option>
+            </select>
+        </div>
+        <div class="col-lg-8" align="center" style="font-size: 35px;">用户借款信息</div>
+        <div class="col-lg-2">
+            <button class="btn btn-primary" id="change_btn">保存</button>
+        </div>
+    </div>
+</div>
+<!--<h1 align="center">用户借款信息</h1><br>-->
 
 <div id="wrap">
     <div class="box">
@@ -55,6 +75,7 @@
             <!--</div>-->
         </div>
         <div>
+            <input type="hidden" value="" id="infoID" />
             <p>
                 <span>手机号:</span>
                 <span id="account">18132070787</span>
@@ -127,20 +148,20 @@
         </div>
     </div>
 </div>
-<div align="center">
-    <button type="button" class="alert alert-success">待还款</button>
-    <button type="button" class="alert alert-info">已还款</button>
-    <button type="button" class="alert alert-warning">待审核</button>
-    <button type="button" class="alert alert-danger">被驳回</button>
-    <button type="button" class="alert alert-success" style="background-color:#afafaf;color:grey;">待完善</button>
-</div>
+<!--<div align="center">-->
+    <!--<button type="button" class="alert alert-success">待还款</button>-->
+    <!--<button type="button" class="alert alert-info">已还款</button>-->
+    <!--<button type="button" class="alert alert-warning">待审核</button>-->
+    <!--<button type="button" class="alert alert-danger">被驳回</button>-->
+    <!--<button type="button" class="alert alert-success" style="background-color:#afafaf;color:grey;">待完善</button>-->
+<!--</div>-->
 
 </div>
-<div class="container">
+<!--<div class="container">
     <p>
         <button type="button" class="btn btn-primary btn-lg btn-block">保存</button>
     </p>
-</div>
+</div>-->
 </body>
 <script src="js/myApp.js"></script>
 <script src="js/jquery.min.js"></script>
@@ -150,7 +171,7 @@
         data: {"id": getQueryString("id")},
         type: "get",
         success: function (data) {
-            var accountInfo = data.data[0];
+            var accountInfo = data.data;
             $("#pid-up").attr("src",url_m.prefic+accountInfo["pidUp"]);
             $("#pid-down").attr("src",url_m.prefic+accountInfo["pidDown"]);
             var error = false;
@@ -161,9 +182,23 @@
                 $("#"+i).css("color",(error ? "red" : "black"));
                 console.log(i+"《-----》"+text);
             }
+            $("#account_status").val(accountInfo["status"]);
             console.log(data.data[0]);
 
         },
+    });
+    $("#change_btn").click(function(){
+        $.post(
+            url_m.prefic+"/account/info/input/status",
+            {"id":$("#infoID").text(),"status":$("#account_status").val()},
+            function(data){
+                if (data.status == "1" || data.status == 1) {
+                    alert("借款状态修改完成！");
+                } else {
+                    alert("修改出错已联系管理员！");
+                }
+            }
+        );
     });
 </script>
 </html>

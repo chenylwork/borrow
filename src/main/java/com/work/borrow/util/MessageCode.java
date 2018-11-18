@@ -44,5 +44,7 @@ public interface MessageCode {
     String VALUE_CODE_ACCOUNT_INFO_INPUT_Y = "12060"; // 用户认证信息录入成功
     String VALUE_CODE_ACCOUNT_INFO_INPUT_N = "12061"; //用户认证信息录入失败
     String VALUE_CODE_ACCOUNT_INFO_INPUT_PID_N = "12070"; // 不是身份证信息
+    String VALUE_CODE_ACCOUNT_INFO_FINASH_N = "12080"; // 借款信息还有未完成的
+    String VALUE_CODE_ACCOUNT_INFO_FINASH_Y = "12081"; // 借款信息没有未完成的
 
 }

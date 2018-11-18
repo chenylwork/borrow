@@ -92,4 +92,18 @@ public interface DataService {
      */
     Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
 
+    /**
+     * 获取未完成的借款信息
+     * @param account
+     * @return
+     */
+    Message getUnOkInfo(String account);
+
+    /**
+     * 修改借款状态
+     * @param accountInfo
+     * @return
+     */
+    Message inputStatus(AccountInfo accountInfo);
+
 }

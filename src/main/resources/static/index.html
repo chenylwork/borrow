@@ -16,8 +16,8 @@
     </style>
 </head>
 <body>
-<div class="page-header text-center">
-    <h1>用户审批信息管理</h1>
+<div class="container page-header text-center">
+    <h1><a href="admin.html" style="float: left; font-size:25px;">客服信息更换</a>用户审批信息管理</h1>
 </div>
 <div class="container">
     <form class="" role="form">
@@ -44,13 +44,13 @@
                 <div class="form-group col-lg-2">
                     <div class="input-group">
                         <span class="input-group-addon">名称</span>
-                        <input class="form-control" type="text" name="name">
+                        <input class="form-control" type="text" id="name" name="name">
                     </div>
                 </div>
                 <div class="form-group col-lg-3">
                     <div class="input-group">
                         <span class="input-group-addon">电话</span>
-                        <input class="form-control" type="text" name="mobile">
+                        <input class="form-control" type="text" id="mobile" name="mobile">
                     </div>
                 </div>
                 <!--后缀-->
@@ -69,11 +69,12 @@
         </div>
     </form>
     <div class="button-box">
-        <button id="status_0" type="button" class="alert alert-success" style="background-color:#afafaf;color:grey;">待完善</button>
-        <button id="status_1" type="button" class="alert alert-warning">待审核</button>
-        <button id="status_2" type="button" class="alert alert-success">待还款</button>
-        <button id="status_3" type="button" class="alert alert-info">已还款</button>
-        <button id="status_4" type="button" class="alert alert-danger">被驳回</button>
+        <span id="status_0" type="button">待完善</span>
+        <span id="status_1" type="button">待审核</span>
+        <span id="status_2" type="button">待还款</span>
+        <span id="status_3" type="button">已还款</span>
+        <span id="status_4" type="button">已逾期</span>
+        <span id="status_5" type="button">被驳回</span>
     </div>
     <br>
     <h1 id="message" align="center"></h1>

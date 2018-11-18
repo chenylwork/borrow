@@ -135,13 +135,23 @@ public interface AccountMapper {
     List<LinkMan> searchLinkman(LinkMan linkMan);
 
     /**
-     *
+     * 删除联系人信息
      * @param linkMan
      * @return
      */
     @Delete("DELETE from linkman where account = #{account} and infoID = #{infoID};")
     boolean deleteLinkMan(LinkMan linkMan);
 
+    /**
+     * 查询用户,借款未完成的信息
+     * @param account
+     * @return
+     */
+    @Select("select `status` from account_info where account = #{accoun} " +
+            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"') limit 0,1;")
+    AccountInfo getAccountStartStatus(String account);
+    @Update("UPDATE account_info set `status` = #{status} where `id` = #{id}")
+    boolean updateStatus(AccountInfo accountInfo);
 
     /*********************************************************************************/
     /**

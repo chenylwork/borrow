@@ -44,4 +44,7 @@ public interface MessageContent {
     String VALUE_CONTENT_ACCOUNT_INFO_INPUT_Y = "信息录入成功"; //
     String VALUE_CONTENT_ACCOUNT_INFO_INPUT_N = "信息录入失败"; //
     String VALUE_CONTENT_ACCOUNT_INFO_INPUT_PID_N = "请上传正确的身份证正面照";
+
+    String VALUE_CONTENT_ACCOUNT_INFO_FINASH_N = "您还有未完成的借款信息"; // 借款信息还有未完成的
+    String VALUE_CONTENT_ACCOUNT_INFO_FINASH_Y = "可以重新借款"; // 借款信息没有未完成的
 }

@@ -30,6 +30,11 @@ public class AccountInfoController {
     @Autowired
     private DataService dataService;
 
+    @RequestMapping("/input/status")
+    public Message input(AccountInfo accountInfo) {
+        return dataService.inputStatus(accountInfo);
+    }
+
     /**
      * 录入银行卡信息
      * @return
@@ -118,6 +123,16 @@ public class AccountInfoController {
     @RequestMapping("/search")
     public Message searchAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
         return dataService.searchAccountInfo(accountInfo,page);
+    }
+
+    /**
+     * 获取未完成的借款信息
+     * @param account
+     * @return
+     */
+    @RequestMapping("/search/un")
+    public Message getUnFinishInfo(String account){
+        return dataService.getUnOkInfo(account);
     }
     /**
      * 查询订单信息
