@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>易贷王APP版本控制</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+</head>
+<body>
+<div class="container">
+<h1 align="center">
+    <div  style="float: left;font-size: 25px;">
+        查看
+        <select name="type" style="list-style: none; border: none;">
+            <option value="0">Android</option>
+            <option value="1">IOS</option>
+        </select>
+    </div>
+    app版本信息列表
+    <div class="btn-group" style="float: right;">
+        <button type="button" class="btn btn-primary">
+            <a href="index.html" style="color: aliceblue;">返回</a>
+        </button>
+    </div>
+</h1>
+</div>
+<br/>
+<div class="container">
+    <form class="" role="form">
+        <input type="hidden" value="1" id="pageNo" />
+        <input type="hidden" value="5" id="length" />
+        <div class="container">
+            <div class="row">
+                <!--下拉框-->
+                <div class="form-group col-lg-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">系统</span>
+                        <select class="form-control" id="type" name="type">
+                            <option value="0">Android</option>
+                            <option value="1">IOS</option>
+                        </select>
+                    </div>
+                </div>
+                <!--前缀-->
+                <div class="form-group col-lg-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">版本编号</span>
+                        <input class="form-control" type="text" id="version" name="version">
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">升级信息</span>
+                        <input class="form-control" type="text" id="content" name="content">
+                    </div>
+                </div>
+                <!--后缀-->
+                <div class="form-group col-lg-2">
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="pid">
+                        <span class="input-group-addon">apk文件</span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" id="search_btn">录入</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <h1 id="message" align="center"></h1>
+    <div id="table-box"></div>
+</div>
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>版本编号</th>
+            <th>更新时间</th>
+            <th>下载地址</th>
+            <th>文件系统</th>
+            <th>更新说明</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Tanmay</td>
+            <td>Bangalore</td>
+            <td>560001</td>
+            <td>560001</td>
+            <td>560001</td>
+        </tr>
+        <tr>
+            <td>Sachin</td>
+            <td>Mumbai</td>
+            <td>Mumbai</td>
+            <td>400003</td>
+            <td>400003</td>
+        </tr>
+        <tr>
+            <td>Uma</td>
+            <td>Pune</td>
+            <td>Pune</td>
+            <td>411027</td>
+            <td>411027</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="js/myApp.js?V10" type="text/javascript"></script>
+</body>
+<script>
+    $(function(){
+        $.get(myobj.prefic+"/borrow/version/app/query/a",{},function(data){
+            console.log(data);
+        });
+    });
+</script>
+</html>

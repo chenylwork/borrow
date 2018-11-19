@@ -67,8 +67,8 @@
 <div id="wrap">
     <div class="box">
         <div>
-            <img src="img/pid.jpg" id="pid-up" width="240px" height="330px" alt="身份证正面照" />
-            <img src="img/pid.jpg" id="pid-down" width="240px" height="330px" alt="身份证反面照" />
+            <img src="img/pid.jpg?V" id="pid-up" width="240px" height="330px" alt="身份证正面照" />
+            <img src="img/pid.jpg?V" id="pid-down" width="240px" height="330px" alt="身份证反面照" />
             <!--<div class="img-box">-->
             <!--</div>-->
             <!--<div class="img-box">-->
@@ -163,7 +163,7 @@
     </p>
 </div>-->
 </body>
-<script src="js/myApp.js"></script>
+<script src="js/myApp.js?v1"></script>
 <script src="js/jquery.min.js"></script>
 <script>
     $.ajax({
@@ -172,6 +172,8 @@
         type: "get",
         success: function (data) {
             var accountInfo = data.data;
+            var pid_up_src = url_m.prefic+(accountInfo["pidUp"] == null ? "/img/pid.jpg" : accountInfo["pidUp"]);
+            var pid_down_src = url_m.prefic+(accountInfo["pidDown"] == null ? "/img/pid.jpg": accountInfo["pidDown"]);
             $("#pid-up").attr("src",url_m.prefic+accountInfo["pidUp"]);
             $("#pid-down").attr("src",url_m.prefic+accountInfo["pidDown"]);
             var error = false;
@@ -194,6 +196,7 @@
             function(data){
                 if (data.status == "1" || data.status == 1) {
                     alert("借款状态修改完成！");
+                    window.location.href = url_m.prefic+"/index.html";
                 } else {
                     alert("修改出错已联系管理员！");
                 }

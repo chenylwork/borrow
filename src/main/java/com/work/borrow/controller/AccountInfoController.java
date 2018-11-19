@@ -108,7 +108,7 @@ public class AccountInfoController {
      */
     @RequestMapping("/input/payment")
     public Message inputAccountPayment(AccountInfo accountInfo) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String nowDate = simpleDateFormat.format(new Date()).toString();
         accountInfo.setStartTime(nowDate);
         accountInfo.setStatus(AccountMapper.STATUS_WRIT);// 订单生效，开始审核
@@ -131,8 +131,13 @@ public class AccountInfoController {
      * @return
      */
     @RequestMapping("/search/un")
-    public Message getUnFinishInfo(String account){
+    public Message getUnFinishInfoStatus(String account){
         return dataService.getUnOkInfo(account);
+    }
+
+    @RequestMapping("/search/finash/n")
+    public Message getUnFinishInfo(AccountInfo account) {
+        return dataService.getUnFinish(account);
     }
     /**
      * 查询订单信息

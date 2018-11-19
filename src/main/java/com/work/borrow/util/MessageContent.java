@@ -47,4 +47,10 @@ public interface MessageContent {
 
     String VALUE_CONTENT_ACCOUNT_INFO_FINASH_N = "您还有未完成的借款信息"; // 借款信息还有未完成的
     String VALUE_CONTENT_ACCOUNT_INFO_FINASH_Y = "可以重新借款"; // 借款信息没有未完成的
+
+    String VALUE_CONTENT_INPUT_Y = "录入成功"; // 信息录入成功
+    String VALUE_CONTENT_INPUT_N = "录入失败"; // 信息录入失败
+
+    String VALUE_CONTENT_QUERY_Y = "获取成功"; // 查询成功
+    String VALUE_CONTENT_QUERY_N = "没有您需要的信息！！"; // 查询失败
 }

@@ -1,5 +1,6 @@
 package com.work.borrow.service;
 
+import com.work.borrow.po.Account;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.po.LinkMan;
 import com.work.borrow.po.Message;
@@ -105,5 +106,12 @@ public interface DataService {
      * @return
      */
     Message inputStatus(AccountInfo accountInfo);
+
+    /**
+     * 获取未完成的信息
+     * @param accountInfo
+     * @return
+     */
+    Message getUnFinish(AccountInfo accountInfo);
 
 }

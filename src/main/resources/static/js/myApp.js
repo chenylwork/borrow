@@ -2,8 +2,8 @@
 const myobj = {
 }
 const url_m = {
-    // prefic : "http://211.149.179.228/borrow"
-     prefic : "http://localhost/borrow"
+    prefic: "http://211.149.179.228/borrow"
+    // prefic : "http://localhost/borrow"
 }
 /**
  * 获取请求参数

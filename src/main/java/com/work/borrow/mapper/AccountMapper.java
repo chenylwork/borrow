@@ -153,6 +153,10 @@ public interface AccountMapper {
     @Update("UPDATE account_info set `status` = #{status} where `id` = #{id}")
     boolean updateStatus(AccountInfo accountInfo);
 
+    @Select("select * FROM account_info where account = #{account} " +
+            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"') limit 0,1;")
+    AccountInfo getUnFinashInfo(AccountInfo accountInfo);
+
     /*********************************************************************************/
     /**
      * 添加详细信息

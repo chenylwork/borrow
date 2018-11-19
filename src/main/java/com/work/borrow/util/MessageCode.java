@@ -47,4 +47,10 @@ public interface MessageCode {
     String VALUE_CODE_ACCOUNT_INFO_FINASH_N = "12080"; // 借款信息还有未完成的
     String VALUE_CODE_ACCOUNT_INFO_FINASH_Y = "12081"; // 借款信息没有未完成的
 
+    String VALUE_CODE_INPUT_Y = "13001"; // 信息录入成功
+    String VALUE_CODE_INPUT_N = "13002"; // 信息录入失败
+
+    String VALUE_CODE_QUERY_Y = "13003"; // 查询成功
+    String VALUE_CODE_QUERY_N = "13004"; // 查询失败
+
 }

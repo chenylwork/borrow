@@ -340,4 +340,17 @@ public class DataServiceImpl implements DataService {
         }
         return message;
     }
+
+    @Override
+    public Message getUnFinish(AccountInfo accountInfo) {
+        AccountInfo unFinashInfo = accountMapper.getUnFinashInfo(accountInfo);
+        Message message = null;
+        if (unFinashInfo != null && unFinashInfo.getId() != null && unFinashInfo.getId() != 0) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_ACCOUNT_INFO_FINASH_N,Message.VALUE_CONTENT_ACCOUNT_INFO_FINASH_N);
+            message.put(Message.KEY_DATA,unFinashInfo);
+        } else {
+            message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_FINASH_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_FINASH_Y);
+        }
+        return message;
+    }
 }
