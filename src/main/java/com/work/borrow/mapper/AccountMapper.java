@@ -24,7 +24,7 @@ public interface AccountMapper {
     String STATUS_START = "2"; // 审核结束，等待还款状态
     String STATUS_END = "3"; // 借款已经结束了，已还款
     String STATUS_PAST = "4"; // 借款过期（已逾期）
-    String STATUS_ERROR = "5"; // 审核未通过
+    String STATUS_ERROR = "5"; // 待放款，审核通过没有放款
     /**
      * 添加新账户
      * @param account 账户信息
@@ -148,13 +148,13 @@ public interface AccountMapper {
      * @return
      */
     @Select("select `status` from account_info where account = #{accoun} " +
-            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"') limit 0,1;")
+            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"','"+STATUS_ERROR+"') limit 0,1;")
     AccountInfo getAccountStartStatus(String account);
     @Update("UPDATE account_info set `status` = #{status} where `id` = #{id}")
     boolean updateStatus(AccountInfo accountInfo);
 
     @Select("select * FROM account_info where account = #{account} " +
-            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"') limit 0,1;")
+            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"','"+STATUS_ERROR+"') limit 0,1;")
     AccountInfo getUnFinashInfo(AccountInfo accountInfo);
 
     /*********************************************************************************/
