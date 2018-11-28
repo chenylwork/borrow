@@ -2,8 +2,14 @@
 const myobj = {
 }
 const url_m = {
-    prefic: "http://211.149.179.228/borrow"
+    // prefic: "http://211.149.179.228/borrow"
    // prefic : "http://localhost/borrow"
+   prefic : "http://"+getHost()+"/borrow"
+}
+function getHost() {
+    var host = "";
+    host = (document.domain == null || document.domain == "") ? window.location.host : document.domain;
+    return host;
 }
 /**
  * 获取请求参数
