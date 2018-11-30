@@ -4,9 +4,10 @@ import com.work.borrow.po.Message;
 import com.work.borrow.po.Order;
 import com.work.borrow.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class OrderController {
 

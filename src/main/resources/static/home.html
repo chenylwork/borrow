@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+    <title>易贷王后台管理</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+    <style>
+        .button-box{width: 0;height: 0;margin: 0;padding: 0; overflow: hidden;}
+        .alert{margin-bottom: 0px; padding: 5px;}
+    </style>
+</head>
+<body>
+<div class="container page-header text-center">
+    <h1>
+        <a href="admin.html" style="float: left; font-size:25px; ">客服信息更换</a>
+        用户审批信息管理
+    </h1>
+</div>
+<div class="container">
+    <form class="" role="form">
+        <input type="hidden" value="1" id="pageNo" />
+        <input type="hidden" value="5" id="length" />
+        <div class="container">
+            <div class="row">
+                <!--下拉框-->
+                <div class="form-group col-lg-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">状态</span>
+                        <select class="form-control" id="status" name="status">
+                            <option value="">全部</option>
+                            <option value="0">待完善</option>
+                            <option value="1">待审核</option>
+                            <option value="2">待还款</option>
+                            <option value="3">已逾期</option>
+                            <option value="4">已还款</option>
+                            <option value="5">待放款</option>
+                        </select>
+                    </div>
+                </div>
+                <!--前缀-->
+                <div class="form-group col-lg-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">名称</span>
+                        <input class="form-control" type="text" id="name" name="name">
+                    </div>
+                </div>
+                <div class="form-group col-lg-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">电话</span>
+                        <input class="form-control" type="text" id="mobile" name="mobile">
+                    </div>
+                </div>
+                <!--后缀-->
+                <div class="form-group col-lg-3">
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="pid">
+                        <span class="input-group-addon">身份证号</span>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" id="search_btn">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="button-box">
+        <span id="status_0" type="button">待完善</span>
+        <span id="status_1" type="button">待审核</span>
+        <span id="status_2" type="button">待还款</span>
+        <span id="status_3" type="button">已还款</span>
+        <span id="status_4" type="button">已逾期</span>
+        <span id="status_5" type="button">待放款</span>
+    </div>
+    <br>
+    <h1 id="message" align="center"></h1>
+    <div id="table-box"></div>
+</div>
+
+<div class="container">
+    <div id="example" style="text-align: center">
+        <ul id="pageLimit"></ul>
+    </div>
+</div>
+</body>
+<script src="js/myApp.js?V10" type="text/javascript"></script>
+<script src="js/static/index.js?v=2018111" type="text/javascript"></script>
+</html>

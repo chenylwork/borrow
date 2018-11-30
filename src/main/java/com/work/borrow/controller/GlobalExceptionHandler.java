@@ -4,6 +4,7 @@ import com.work.borrow.po.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  * 全局异常处理器
  * 继承ResponseEntityExceptionHandler为了解决REST接口的全局异常处理
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
