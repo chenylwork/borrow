@@ -32,8 +32,13 @@ public class AccountInfoController {
     @Autowired
     private DataService dataService;
 
-    @RequestMapping("/input/status")
+    @RequestMapping("/input/any")
     public Message input(AccountInfo accountInfo) {
+        return dataService.inputAccountInfo(accountInfo);
+    }
+
+    @RequestMapping("/input/status")
+    public Message inputStatus(AccountInfo accountInfo) {
         return dataService.inputStatus(accountInfo);
     }
 
@@ -110,7 +115,7 @@ public class AccountInfoController {
      */
     @RequestMapping("/input/payment")
     public Message inputAccountPayment(AccountInfo accountInfo) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nowDate = simpleDateFormat.format(new Date()).toString();
         accountInfo.setStartTime(nowDate);
         accountInfo.setStatus(AccountMapper.STATUS_WRIT);// 订单生效，开始审核

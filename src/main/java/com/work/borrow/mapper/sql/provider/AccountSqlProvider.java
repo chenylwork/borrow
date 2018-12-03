@@ -157,7 +157,7 @@ public class AccountSqlProvider {
         if (whereBuffer.length() > 0) {
             where = " where "+whereBuffer.substring(0,whereBuffer.lastIndexOf("and"));
         }
-        String querySql = "select * from "+tableName+where+mysqlPageSql(page);
+        String querySql = "select * from "+tableName+where+" order by opentime desc "+mysqlPageSql(page);
         logger.info(querySql);
         return querySql;
     }

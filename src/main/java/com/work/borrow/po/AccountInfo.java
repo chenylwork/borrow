@@ -1,12 +1,7 @@
 package com.work.borrow.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.work.borrow.annotation.Rid;
 import com.work.borrow.annotation.Table;
-import com.work.borrow.mapper.AccountMapper;
-import org.apache.ibatis.annotations.Property;
-import org.apache.ibatis.annotations.Result;
 
 /**
  * 账户详细信息
@@ -38,7 +33,13 @@ public class AccountInfo {
     private String payment; // 付款方式
     private String paymentCode; // 付款单号
     private String life; // 借款期限
-    private String startTime; // 开始时间
+    private String openTime; // 信息录入时间
+    private String startTime; // 放款时间时间
+    private String house; // 是否有房
+    private String car; // 是否有车
+    private String creditCard; // 是否有信用卡
+    private String creditCardNo; // 信用卡卡号
+    private String creditCardBank; // 信用卡开户行
     private String status; // 信息状态
 
     public Integer getId() {
@@ -209,6 +210,54 @@ public class AccountInfo {
         this.startTime = startTime;
     }
 
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getCar() {
+        return car;
+    }
+
+    public void setCar(String car) {
+        this.car = car;
+    }
+
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public String getCreditCardNo() {
+        return creditCardNo;
+    }
+
+    public void setCreditCardNo(String creditCardNo) {
+        this.creditCardNo = creditCardNo;
+    }
+
+    public String getCreditCardBank() {
+        return creditCardBank;
+    }
+
+    public void setCreditCardBank(String creditCardBank) {
+        this.creditCardBank = creditCardBank;
+    }
+
     @Override
     public String toString() {
         return "AccountInfo{" +
@@ -231,7 +280,13 @@ public class AccountInfo {
                 ", payment='" + payment + '\'' +
                 ", paymentCode='" + paymentCode + '\'' +
                 ", life='" + life + '\'' +
+                ", openTime='" + openTime + '\'' +
                 ", startTime='" + startTime + '\'' +
+                ", house='" + house + '\'' +
+                ", car='" + car + '\'' +
+                ", creditCard='" + creditCard + '\'' +
+                ", creditCardNo='" + creditCardNo + '\'' +
+                ", creditCardBank='" + creditCardBank + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

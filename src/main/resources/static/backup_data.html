@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据备份</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-paginator.js"></script>
+    <script type="text/javascript" src="js/myApp.js"></script>
+</head>
+<body>
+<h1 align="center">数据备份</h1>
+<div class="container"style="margin-top: 30px;">
+    <h1 align="center">
+        <button type="button" class="btn btn-info btn-lg btn-block" id="download">
+           备份数据
+        </button>
+    </h1>
+</div>
+<script>
+    $("#download").click(function(){
+        window.location.href = url_m.prefic+"/database/backup";
+    });
+</script>
+</body>
+</html>

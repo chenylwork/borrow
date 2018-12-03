@@ -41,6 +41,8 @@ public class DataController {
         if ("wx".equals(name)) fileName = "wx_pay_QR";
         if ("kf".equals(name)) fileName = "services_QR";
         try {
+            File localFile = new File(IMG_PATH+fileName+".jpg");
+            if (!localFile.getParentFile().exists()) localFile.getParentFile().mkdirs();
             file.transferTo(new File(IMG_PATH+fileName+".jpg"));
             return Message.createSuccessMessage();
         } catch (IOException e) {

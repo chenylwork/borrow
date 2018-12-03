@@ -31,17 +31,25 @@ function searchAccount(pageNo,length) {
         success:function(data){
             $("#table-box").empty();
             if ((data.status == "1" || data.status == 1) && data.data.size > 0) {
-                var initHtml = "<table class=\"table table-hover table-bordered\">";
+                var initHtml = "<table class=\"table table-bordered table-striped\">";
                 initHtml += "<thead>" +
                     "<tr>" +
                     "<th>手机号码</th>\n" +
                     "<th>姓名</th>\n" +
                     "<th>借款金额</th>\n" +
                     "<th>身份证号</th>\n" +
+                    "<th>银行卡号</th>\n" +
                     "<th>付款方式</th>\n" +
                     "<th>年收入</th>\n" +
                     "<th>工作年限</th>\n" +
+                    "<th>是否有房</th>\n" +
+                    "<th>是否有车</th>\n" +
+                    "<th>信用卡</th>\n" +
+                    "<th>信用卡号</th>\n" +
+                    "<th>信用卡开户行</th>\n" +
+                    "<th>申请时间</th>\n" +
                     "<th>信息状态</th>\n" +
+                    "<th>操作</th>\n" +
                     "</tr>\n" +
                     "</thead>";
                 initHtml += "<tbody>";
@@ -60,17 +68,29 @@ function searchAccount(pageNo,length) {
                             loan = "有房无贷";
                             break;
                     }
-                    initHtml += "<tr class='info_tr' onclick='infoClickFunction("+dataArray[i].infoID+")'>\n" +
+                    initHtml += "<tr class='info_tr'>\n" +
                         "<td>"+dataArray[i].account+"</td>\n" +
                         "<td>"+(dataArray[i].name == null ? "待录入" : dataArray[i].name)+"</td>\n" +
                         "<td>"+(dataArray[i].borrow == null ? "待录入" : dataArray[i].borrow)+"</td>\n" +
                         "<td>"+(dataArray[i].pid == null ? "待录入" : dataArray[i].pid)+"</td>\n" +
+                        "<td>"+(dataArray[i].cardCode == null ? "待录入" : dataArray[i].cardCode)+"</td>\n" +
                         "<td>"+(dataArray[i].payment == null ? "待录入" : dataArray[i].payment)+"</td>\n" +
                         "<td>"+(dataArray[i].income == null? "待录入" : dataArray[i].income)+"</td>\n" +
                         "<td>"+(dataArray[i].workTime == null? "待录入" : dataArray[i].workTime)+"年</td>\n" +
+                        ////////////
+                        "<td>"+(dataArray[i].hourse == null? "待录入" : dataArray[i].hourse)+"</td>\n" +
+                        "<td>"+(dataArray[i].car == null? "待录入" : dataArray[i].car)+"年</td>\n" +
+                        "<td>"+(dataArray[i].creditCard == null? "待录入" : dataArray[i].creditCard)+"</td>\n" +
+                        "<td>"+(dataArray[i].creditCardNo == null? "无" : dataArray[i].creditCardNo)+"</td>\n" +
+                        "<td>"+(dataArray[i].creditCardBank == null? "无" : dataArray[i].creditCardBank)+"</td>\n" +
+                        /////////////
+                        "<td>"+(dataArray[i].startTime == null? "待录入" : dataArray[i].startTime)+"</td>"+
                         "<td>\n" +
                         $("#status_"+dataArray[i].status).prop("outerHTML") +
                         "</td>\n" +
+                        "<td onclick='infoClickFunction("+dataArray[i].infoID+")'><a href=\"#\" class=\"btn btn-info btn-hover btn-sm\">\n" +
+                        "操作" +
+                        "\t\t\t</a></td>"+
                         "</tr>";
                 }
                 /****************数据部分***************/

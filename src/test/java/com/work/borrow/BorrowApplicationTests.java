@@ -12,6 +12,7 @@ import com.work.borrow.service.SMSService;
 import com.work.borrow.serviceImpl.MailService;
 import com.work.borrow.util.FileUtils;
 import com.work.borrow.util.JsonUtils;
+import com.work.borrow.util.MySQLUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -27,8 +28,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class BorrowApplicationTests {
 	@Autowired
 	private SMSService smsService;
@@ -38,7 +39,7 @@ public class BorrowApplicationTests {
     private AccountMapper accountMapper;
 //    @Autowired
 //    private MailService mailService;
-    @Value("${pid.img.file.path}")
+    @Value("${pid.img.file.save.path}")
     private String path;
 
     private static Logger logger = LoggerFactory.getLogger(BorrowApplicationTests.class);
@@ -108,7 +109,24 @@ public class BorrowApplicationTests {
     }
     @Test
     public void readPid() {
+
         JsonUtils.readerPid("");
+    }
+
+    /**
+     * mysql 备份
+     */
+    @Test
+    public void backupMysql() {
+        MySQLUtils.backup("D:/borrow/data/201812/borrow.sql");
+    }
+
+    /**
+     * 还原数据库
+     */
+    @Test
+    public void restoreMysql() {
+        MySQLUtils.restore("D:/borrow/data/201812/borrow.sql");
     }
 
 

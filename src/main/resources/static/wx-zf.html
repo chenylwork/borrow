@@ -19,24 +19,11 @@
 </style>
 <body>
 <div class="container">
-    <h1 align="center">微信支付二维码
-        <div class="btn-group" style="float: right;">
-            <button type="button" class="btn btn-primary">
-                <a href="home.html" style="color: aliceblue;">返回</a>
-            </button>
-        </div>
-    </h1>
+    <h1 align="center">微信支付二维码</h1>
 </div>
 <div class="container">
     <div class="row">
-        <div class="img_div col-lg-4" data-prefix="kf" >
-            <form action="/upload/admin/img/kf" id="kf_form" style="width: 0;overflow: hidden" enctype="multipart/form-data">
-                <input type="file" name="file" id="kf_file"class="qr_file"/>
-            </form>
-            <img src="image/services_QR.jpg" class="qr_img" width="305px" height="305px"id="kf_img"><br>
-            <h3 class="img-font" align="center">微信客服二维码</h3>
-            <button type="button" id="kf_btn" class="qr_btn btn btn-primary btn-lg btn-block">更改</button>
-        </div>
+        <div class="img_div col-lg-4" data-prefix="kf" ></div>
 
 
         <div class="img_div col-lg-4" data-prefix="wx">
@@ -44,54 +31,16 @@
                 <input type="file" id="wx_file" name="file" class="qr_file"/>
             </form>
             <img src="image/wx_pay_QR.jpg" class="qr_img" width="305px" height="305px" id="wx_img"><br>
-            <h3 class="img-font" align="center">微信支付二维码</h3>
+            <script>
+                $("#wx_img").attr("src",$("#wx_img").attr("src")+"?V"+new Date().getTime());
+            </script>
+            <h3 class="img-font" align="center"></h3>
             <button type="button" id="wx_btn" class="qr_btn btn btn-primary btn-lg btn-block">更改</button>
         </div>
 
 
-        <div class="img_div col-lg-4" data-prefix="ali">
-            <form action="/upload/admin/img/ali" id="ali_form" style="width: 0;overflow: hidden" method="post" enctype="multipart/form-data">
-                <input type="file" id="ali_file" name="file" class="qr_file"/>
-            </form>
-            <img src="image/ali_pay_QR.jpg" class="qr_img" id="ali_img" width="305px" height="305px"><br>
-            <h3 class="img-font" align="center">支付宝支付二维码</h3>
-            <button type="button" id="ali_btn" class="qr_btn btn btn-primary btn-lg btn-block">更改</button>
-        </div>
+        <div class="img_div col-lg-4" data-prefix="ali"></div>
     </div>
-</div>
-<div class="container" style="margin-top: 130px;">
-    <form class="bs-example bs-example-form" role="form" >
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">客服QQ</button>
-                    </span>
-                    <input type="text" class="form-control" id="qq_text">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" id="qq_btn">更改</button>
-                    </span>
-                </div><!-- /input-group -->
-            </div><!-- /.col-lg-6 -->
-        </div><!-- /.row -->
-    </form>
-</div>
-<div class="container" style="margin-top: 30px;">
-    <form class="bs-example bs-example-form" role="form" >
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">广播信息</button>
-                    </span>
-                    <input type="text" class="form-control" id="ms_text">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" id="ms_btn">更改</button>
-                    </span>
-                </div><!-- /input-group -->
-            </div><!-- /.col-lg-6 -->
-        </div><!-- /.row -->
-    </form>
 </div>
 </body>
 <script>
