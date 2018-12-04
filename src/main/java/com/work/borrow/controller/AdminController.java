@@ -1,5 +1,6 @@
 package com.work.borrow.controller;
 
+import com.work.borrow.common.MessageCommon;
 import com.work.borrow.dao.redis.RedisDao;
 import com.work.borrow.po.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ public class AdminController {
 
     @Autowired
     private RedisDao redisDao;
-    private static final String RADIO_MESSAGE_KEY = "radio_message";
+    @Autowired
+    private MessageCommon messageCommon;
     /**
      * 录入广播消息
      * @param ms
@@ -23,7 +25,7 @@ public class AdminController {
     public Message inputRadioMessage(String ms) {
         Message message = null;
         if (ms != null && !ms.equals("")) {
-            redisDao.set(RADIO_MESSAGE_KEY,ms);
+            messageCommon.setRadioMessage(ms);
             message = Message.createSuccessMessage(Message.VALUE_CODE_INPUT_Y,Message.VALUE_CONTENT_INPUT_Y);
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_INPUT_N,Message.VALUE_CONTENT_INPUT_N);
@@ -36,12 +38,12 @@ public class AdminController {
      * @return
      */
     @RequestMapping("/radio/get")
-    public Message getRadioMessage() {
+    public Message getRadioMessage(String account) {
         Message message = null;
-        String radio = redisDao.get(RADIO_MESSAGE_KEY);
-        if (radio != null && !radio.equals("")){
+        Message radioMessage = messageCommon.getMessage(account);
+        if (Message.VALUE_STATUS_SUCCESS.equals(radioMessage.get(Message.KEY_STATUS))){
             message = Message.createSuccessMessage(Message.VALUE_CODE_QUERY_Y,Message.VALUE_CONTENT_QUERY_Y);
-            message.put(Message.KEY_DATA,radio);
+            message.put(Message.KEY_DATA,radioMessage.get(Message.KEY_DATA));
         } else {
             message = Message.createSuccessMessage(Message.VALUE_CODE_QUERY_N,Message.VALUE_CONTENT_QUERY_N);
         }

@@ -37,19 +37,18 @@ public class AccountInfoController {
         return dataService.inputAccountInfo(accountInfo);
     }
 
-    @RequestMapping("/input/status")
-    public Message inputStatus(AccountInfo accountInfo) {
-        return dataService.inputStatus(accountInfo);
-    }
-
     /**
-     * 录入银行卡信息
+     * 上传身份证正反面照片
+     * @param account 用户账户手机号
+     * @param up 身份证正面照
+     * @param down 身份证反面照
      * @return
      */
-    @RequestMapping("/input/card")
-    public Message inputCard(AccountInfo accountInfo) {
-        return dataService.inputAccountInfo(accountInfo);
+    @RequestMapping("/upload/pid")
+    public Message uploadPid(AccountInfo account, MultipartFile up, MultipartFile down) {
+        return dataService.uploadPidImg(up,down,account);
     }
+
 
     /**
      * 录入工作信息
@@ -82,21 +81,17 @@ public class AccountInfoController {
     }
 
     /**
-     * 上传身份证正反面照片
-     * @param account 用户账户手机号
-     * @param up 身份证正面照
-     * @param down 身份证反面照
+     * 录入银行卡信息
      * @return
      */
-    @RequestMapping("/upload/pid")
-    public Message uploadPid(AccountInfo account, MultipartFile up, MultipartFile down) {
-        return dataService.uploadPidImg(up,down,account);
+    @RequestMapping("/input/card")
+    public Message inputCard(AccountInfo accountInfo) {
+        accountInfo.setStatus(AccountMapper.STATUS_WRIT); // 等待审核
+        return dataService.inputAccountInfo(accountInfo);
     }
-//    @RequestMapping("/upload/pid/s")
-//    public Message uploadPidByBuffer(AccountInfo account, String up, String down) {
-//        Fil
-//        return dataService.uploadPidImg(up,down,account);
-//    }
+
+
+
 
     /**
      * 录入借款金额
@@ -115,11 +110,18 @@ public class AccountInfoController {
      */
     @RequestMapping("/input/payment")
     public Message inputAccountPayment(AccountInfo accountInfo) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String nowDate = simpleDateFormat.format(new Date()).toString();
-        accountInfo.setStartTime(nowDate);
-        accountInfo.setStatus(AccountMapper.STATUS_WRIT);// 订单生效，开始审核
+        accountInfo.setStatus(AccountMapper.STATUS_BEFORE);// 用户付款，等待放款
         return dataService.inputAccountInfo(accountInfo);
+    }
+
+    /**
+     * 修改借款信息状态码
+     * @param accountInfo
+     * @return
+     */
+    @RequestMapping("/input/status")
+    public Message inputStatus(AccountInfo accountInfo) {
+        return dataService.inputStatus(accountInfo);
     }
 
     /**
@@ -132,6 +134,15 @@ public class AccountInfoController {
         return dataService.searchAccountInfo(accountInfo,page);
     }
 
+    /**
+     * 获取当前正在使用的借款信息
+     * @param account
+     * @return
+     */
+    @RequestMapping("/search/use")
+    public Message searchNowUseInfo(String account) {
+        return dataService.getNowUseInfo(account);
+    }
     /**
      * 获取未完成的借款信息
      * @param account

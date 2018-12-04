@@ -1,5 +1,6 @@
 package com.work.borrow.serviceImpl;
 
+import com.work.borrow.common.MessageCommon;
 import com.work.borrow.mapper.AccountMapper;
 import com.work.borrow.po.*;
 import com.work.borrow.service.DataService;
@@ -15,6 +16,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -26,6 +28,8 @@ public class DataServiceImpl implements DataService {
     private AccountMapper accountMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageCommon messageCommon;
 
     @Value("${pid.img.file.save.path}")
     private String filePath;
@@ -332,6 +336,21 @@ public class DataServiceImpl implements DataService {
     @Override
     public Message inputStatus(AccountInfo accountInfo) {
         Message message = null;
+        String status = accountInfo.getStatus();
+        String account = accountInfo.getAccount();
+        // 审核通过
+        if (status != null && status.equals(AccountMapper.STATUS_START)){
+            messageCommon.setReviewMessage(account,status,messageCommon.getReviewSuccessMessage(account));
+        }
+        // 审核驳回
+        if (status != null && status.equals(AccountMapper.STATUS_START)){
+            messageCommon.setReviewMessage(account,status,messageCommon.getReviewFailMessage(account));
+        }
+        // 修改为放款时，加入时间
+        if (status != null && status.equals(AccountMapper.STATUS_START)) {
+            String nowTime = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()).toString();
+            accountInfo.setStartTime(nowTime);
+        }
         boolean updateStatus = accountMapper.updateStatus(accountInfo);
         if (updateStatus) {
             message = Message.createSuccessMessage();
@@ -350,6 +369,19 @@ public class DataServiceImpl implements DataService {
             message.put(Message.KEY_DATA,unFinashInfo);
         } else {
             message = Message.createFailMessage(Message.VALUE_CODE_ACCOUNT_INFO_FINASH_Y,Message.VALUE_CONTENT_ACCOUNT_INFO_FINASH_Y);
+        }
+        return message;
+    }
+
+    @Override
+    public Message getNowUseInfo(String account) {
+        Message message = null;
+        AccountInfo accountInfo = accountMapper.getUseAccountByMobile(account);
+        if (accountInfo != null && accountInfo.getId() != null) {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_QUERY_Y,Message.VALUE_CONTENT_QUERY_Y);
+            message.put(Message.KEY_DATA,accountInfo);
+        } else {
+            message = Message.createSuccessMessage(Message.VALUE_CODE_QUERY_N,Message.VALUE_CONTENT_QUERY_N);
         }
         return message;
     }

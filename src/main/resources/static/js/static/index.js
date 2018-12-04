@@ -18,32 +18,35 @@ function infoClickFunction(id) {
 }
 // 获取数据并填充
 function searchAccount(pageNo,length) {
+    var params = {
+        "account":$("#mobile").val(),
+        "name":$("#name").val(),
+        "pid":$("#pid").val(),
+        "status":$("#status").val(),
+        "no":pageNo,
+        "length":length
+    };
+    console.info("查询参数为：");
+    console.info(params)
     $.ajax({
         url:url_m.prefic+"/account/info/search",
-        data:{
-            "account":$("#mobile").val(),
-            "name":$("#name").val(),
-            "pid":$("#pid").val(),
-            "status":$("#status").val(),
-            "no":pageNo,
-            "length":length
-        },
+        data:params,
         success:function(data){
             $("#table-box").empty();
             if ((data.status == "1" || data.status == 1) && data.data.size > 0) {
                 var initHtml = "<table class=\"table table-bordered table-striped\">";
                 initHtml += "<thead>" +
                     "<tr>" +
-                    "<th>手机号码</th>\n" +
+                    "<th>手机</th>\n" +
                     "<th>姓名</th>\n" +
                     "<th>借款金额</th>\n" +
-                    "<th>身份证号</th>\n" +
-                    "<th>银行卡号</th>\n" +
+                    "<th>身份证</th>\n" +
+                    "<th>银行卡</th>\n" +
                     "<th>付款方式</th>\n" +
                     "<th>年收入</th>\n" +
                     "<th>工作年限</th>\n" +
-                    "<th>是否有房</th>\n" +
-                    "<th>是否有车</th>\n" +
+                    "<th>有房</th>\n" +
+                    "<th>有车</th>\n" +
                     "<th>信用卡</th>\n" +
                     "<th>信用卡号</th>\n" +
                     "<th>信用卡开户行</th>\n" +
@@ -78,8 +81,8 @@ function searchAccount(pageNo,length) {
                         "<td>"+(dataArray[i].income == null? "待录入" : dataArray[i].income)+"</td>\n" +
                         "<td>"+(dataArray[i].workTime == null? "待录入" : dataArray[i].workTime)+"年</td>\n" +
                         ////////////
-                        "<td>"+(dataArray[i].hourse == null? "待录入" : dataArray[i].hourse)+"</td>\n" +
-                        "<td>"+(dataArray[i].car == null? "待录入" : dataArray[i].car)+"年</td>\n" +
+                        "<td>"+(dataArray[i].house == null? "待录入" : dataArray[i].house)+"</td>\n" +
+                        "<td>"+(dataArray[i].car == null? "待录入" : dataArray[i].car)+"</td>\n" +
                         "<td>"+(dataArray[i].creditCard == null? "待录入" : dataArray[i].creditCard)+"</td>\n" +
                         "<td>"+(dataArray[i].creditCardNo == null? "无" : dataArray[i].creditCardNo)+"</td>\n" +
                         "<td>"+(dataArray[i].creditCardBank == null? "无" : dataArray[i].creditCardBank)+"</td>\n" +

@@ -93,12 +93,7 @@ public interface DataService {
      */
     Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
 
-    /**
-     * 获取未完成的借款信息
-     * @param account
-     * @return
-     */
-    Message getUnOkInfo(String account);
+
 
     /**
      * 修改借款状态
@@ -108,10 +103,23 @@ public interface DataService {
     Message inputStatus(AccountInfo accountInfo);
 
     /**
+     * 获取当前使用的借款信息
+     * @param account
+     * @return
+     */
+    Message getNowUseInfo(String account);
+
+    /**
      * 获取未完成的信息
      * @param accountInfo
      * @return
      */
     Message getUnFinish(AccountInfo accountInfo);
+    /**
+     * 获取未完成的借款信息
+     * @param account
+     * @return
+     */
+    Message getUnOkInfo(String account);
 
 }

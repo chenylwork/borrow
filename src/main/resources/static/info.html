@@ -37,7 +37,7 @@
             width:50%;
             float:left
         }
-        p{margin: 0 0 45px;}
+        p{margin: 0 0 35px;}
         .img{transform: rotate(-90deg);}
         #head{font-size: 25px;margin-top: 35px;}
     </style>
@@ -46,22 +46,13 @@
 <div class="container" style="margin-bottom: 35px;">
     <div class="row" id="head">
         <div class="col-lg-2">
-            状态
-            <!--<select id="account_status">-->
-                <!--<option value="0">待完善</option>-->
-                <!--<option value="1">待审核</option>-->
-                <!--<option value="2">待还款</option>-->
-                <!--<option value="3">已还款</option>-->
-                <!--<option value="4">已逾期</option>-->
-                <!--<option value="5">待放款</option>-->
-            <!--</select>-->
+            操作
             <select id="account_status">
-                <option value="0">待完善</option>
-                <option value="1">待审核</option>
-                <option value="5">通过</option>
-                <option value="2">放款</option>
-                <option value="3">结清</option>
-                <option value="4">逾期</option>
+                <option value="2">通过</option>
+                <option value="3">驳回</option>
+                <option value="5">放款</option>
+                <option value="6">结清</option>
+                <option value="7">逾期</option>
             </select>
         </div>
         <div class="col-lg-8" align="center" style="font-size: 35px;">用户借款信息</div>
@@ -148,6 +139,26 @@
                 <span>借款时间</span>
                 <span id="startTime"></span>
             </p>
+            <p>
+                <span>是否有车</span>
+                <span id="car"></span>
+            </p>
+            <p>
+                <span>是否有房</span>
+                <span id="house"></span>
+            </p>
+            <p>
+                <span>是否有信用卡</span>
+                <span id="creditCard"></span>
+            </p>
+            <p>
+                <span>信用卡号</span>
+                <span id="creditCardNo"></span>
+            </p>
+            <p>
+                <span>信用卡开户行</span>
+                <span id="creditCardBank"></span>
+            </p>
             <p style="width:100%">
                 <span>工作地址</span>
                 <span id="workAddress"></span>
@@ -159,20 +170,8 @@
         </div>
     </div>
 </div>
-<!--<div align="center">-->
-    <!--<button type="button" class="alert alert-success">待还款</button>-->
-    <!--<button type="button" class="alert alert-info">已还款</button>-->
-    <!--<button type="button" class="alert alert-warning">待审核</button>-->
-    <!--<button type="button" class="alert alert-danger">被驳回</button>-->
-    <!--<button type="button" class="alert alert-success" style="background-color:#afafaf;color:grey;">待完善</button>-->
-<!--</div>-->
 
 </div>
-<!--<div class="container">
-    <p>
-        <button type="button" class="btn btn-primary btn-lg btn-block">保存</button>
-    </p>
-</div>-->
 </body>
 <script src="js/myApp.js?v1"></script>
 <script src="js/jquery.min.js"></script>
@@ -183,6 +182,7 @@
         type: "get",
         success: function (data) {
             var accountInfo = data.data;
+            console.info(accountInfo);
             var pid_up_src = url_m.prefic+(accountInfo["pidUp"] == null ? "/img/pid.jpg" : accountInfo["pidUp"]);
             var pid_down_src = url_m.prefic+(accountInfo["pidDown"] == null ? "/img/pid.jpg": accountInfo["pidDown"]);
             $("#pid-up").attr("src",url_m.prefic+accountInfo["pidUp"]);
@@ -193,11 +193,9 @@
                 var text = (error = (value == null || value == "")) ? "暂未录入" : value ;
                 $("#"+i).html(text);
                 $("#"+i).css("color",(error ? "red" : "black"));
-                console.log(i+"《-----》"+text);
+                // console.log(i+"《-----》"+text);
             }
-            $("#account_status").val(accountInfo["status"]);
-            console.log(data.data[0]);
-
+            // $("#account_status").val(accountInfo["status"]);
         },
     });
     $("#change_btn").click(function(){

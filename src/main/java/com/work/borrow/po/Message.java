@@ -23,6 +23,21 @@ public class Message extends LinkedHashMap implements com.work.borrow.util.Messa
     }
 
     /**
+     * 创建一个普通消息
+     * @return
+     */
+    public static <T> Message createMessage(T t) {
+        Message message = new Message();
+        message.put(KEY_DATA,t);
+        return message;
+    }
+
+    public static <T> Message createSuccessMessage(T data) {
+        Message message = createSuccessMessage();
+        message.put(KEY_DATA,data);
+        return message;
+    }
+    /**
      * 获取成功消息
      * @param code 消息编号
      * @param content 消息内容

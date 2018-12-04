@@ -40,6 +40,7 @@ public class AccountInfo {
     private String creditCard; // 是否有信用卡
     private String creditCardNo; // 信用卡卡号
     private String creditCardBank; // 信用卡开户行
+    private String purpose; // 资金用途
     private String status; // 信息状态
 
     public Integer getId() {
@@ -258,6 +259,14 @@ public class AccountInfo {
         this.creditCardBank = creditCardBank;
     }
 
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
     @Override
     public String toString() {
         return "AccountInfo{" +
@@ -283,6 +292,7 @@ public class AccountInfo {
                 ", openTime='" + openTime + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", house='" + house + '\'' +
+                ", purpose='" + purpose + '\'' +
                 ", car='" + car + '\'' +
                 ", creditCard='" + creditCard + '\'' +
                 ", creditCardNo='" + creditCardNo + '\'' +

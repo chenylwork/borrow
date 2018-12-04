@@ -35,11 +35,7 @@ public class RedisDaoImpl implements RedisDao {
 
     @Override
     public void set(String key, String value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        redisTemplate.opsForValue().set(key, value);
     }
 
     @Override

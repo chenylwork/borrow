@@ -43,10 +43,10 @@ public class AccountSqlProvider {
 //        if (account.getPid() != null && !account.getPid().equals("")) {
 //            stringBuffer.append(" and pid = #{account.pid}");
 //        }
-//        // 审批状态
-//        if (account.getCheck() != null && !account.getCheck().equals("")) {
-//            stringBuffer.append(" and `check` = #{account.check}");
-//        }
+        // 审批状态
+         if (account.getStatus() != null && !account.getStatus().equals("")) {
+             stringBuffer.append(" and `status` = #{status}");
+         }
         logger.info("where语句："+stringBuffer.toString());
         return stringBuffer;
     }
@@ -213,7 +213,7 @@ public class AccountSqlProvider {
             }
         }
         String updateStr = updateBuffer.substring(0,updateBuffer.lastIndexOf(","));
-        String updateSql = "update "+tableName+" set "+updateStr+" where account = #{account} and `status` = "+ AccountMapper.STATUS_OPEN+";";
+        String updateSql = "update "+tableName+" set "+updateStr+" where account = #{account} and `status` in ("+ AccountMapper.UPDATE_STATUS+");";
         logger.info(updateSql);
         return updateSql;
     }

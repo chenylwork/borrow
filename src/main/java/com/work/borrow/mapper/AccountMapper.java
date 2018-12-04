@@ -19,12 +19,22 @@ import java.util.Map;
 public interface AccountMapper {
     String ACCOUNT_INFO_PREFIX = "account";
     String PAGE_ALIAS = "page";
-    String STATUS_OPEN = "0"; // 借款信息开始录入，还没录入结束
-    String STATUS_WRIT = "1"; // 借款信息录入结束，等待审核
-    String STATUS_START = "2"; // 审核结束，等待还款状态
-    String STATUS_END = "3"; // 借款已经结束了，已还款
-    String STATUS_PAST = "4"; // 借款过期（已逾期）
-    String STATUS_ERROR = "5"; // 待放款，审核通过没有放款
+    String STATUS_OPEN = "0"; // 前台录入还未结束--》》》》录入中
+    String STATUS_WRIT = "1"; //  等待后台审核-》》》》》》待审核
+    String STATUS_PASS = "2"; // 审核通过，等待付款--》》》待付款
+    String STATUS_ERROR = "3"; // 审核驳回 --》》》》》》》被驳回
+    String STATUS_BEFORE = "4"; // 用户付款，等待放款 -》》待放款
+    String STATUS_START = "5"; // 后台放款，-- 》》》》》》待还款
+    String STATUS_END = "6"; // 借款结束，已还款-》》》》》已还款
+    String STATUS_PAST = "7"; // 借款过期--》》》》》》》》已逾期
+
+    // 用户不能重新借款的状态
+    String BORROW_UN_OVER = "'"+STATUS_WRIT+"','"+STATUS_PASS+"','"+STATUS_ERROR+"','"+
+            STATUS_BEFORE+"','"+STATUS_START+"','"+STATUS_PAST+"'";
+
+    // 修改的状态
+    String UPDATE_STATUS = "'"+STATUS_OPEN+"','"+STATUS_PASS+"'";
+
     /**
      * 添加新账户
      * @param account 账户信息
@@ -123,7 +133,7 @@ public interface AccountMapper {
      * @param account 用户手机号
      * @return
      */
-    @Select("SELECT * FROM account_info WHERE account = #{account} AND status = '"+STATUS_OPEN+"' limit 1;")
+    @Select("SELECT * FROM account_info WHERE account = #{account} AND status in ("+UPDATE_STATUS+") limit 1;")
     public AccountInfo getUseAccountByMobile(@Param("account") String account);
 
     /**
@@ -143,20 +153,37 @@ public interface AccountMapper {
     boolean deleteLinkMan(LinkMan linkMan);
 
     /**
-     * 查询用户,借款未完成的信息
+     * 查询用户,借款未完成的信息状态
      * @param account
      * @return
      */
     @Select("select `status` from account_info where account = #{accoun} " +
-            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"','"+STATUS_ERROR+"') limit 0,1;")
+            "and `status` in ("+BORROW_UN_OVER+") limit 0,1;")
     AccountInfo getAccountStartStatus(String account);
-    @Update("UPDATE account_info set `status` = #{status} where `id` = #{id}")
+
+    /**
+     * 修改借款信息状态码
+     * @param accountInfo
+     * @return
+     */
+    @Update("UPDATE account_info set `status` = #{status},startTime = #{startTime} where `id` = #{id}")
     boolean updateStatus(AccountInfo accountInfo);
 
+    /**
+     * 获取用户不能重新借款的信息
+     * @param accountInfo
+     * @return
+     */
     @Select("select * FROM account_info where account = #{account} " +
-            "and `status` in ('"+STATUS_WRIT+"','"+STATUS_START+"','"+STATUS_PAST+"','"+STATUS_ERROR+"') limit 0,1;")
+            "and `status` in ("+BORROW_UN_OVER+") limit 0,1;")
     AccountInfo getUnFinashInfo(AccountInfo accountInfo);
 
+    /*********************************************************************************/
+    /*********************************************************************************/
+    /*********************************************************************************/
+    /*********************************************************************************/
+    /*********************************************************************************/
+    /*********************************************************************************/
     /*********************************************************************************/
     /**
      * 添加详细信息

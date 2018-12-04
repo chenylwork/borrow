@@ -28,7 +28,7 @@ public class DatabaseController {
     public Message download(HttpServletResponse response) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String fileName = simpleDateFormat.format(new Date())+".sql";
-        String fileParentPath = path+"/"+fileName.substring(0,8);
+        String fileParentPath = path+"/data/"+fileName.substring(0,8);
         String filePath = fileParentPath+"/"+fileName;
         File file = new File(filePath);
         MySQLUtils.backup(filePath);
