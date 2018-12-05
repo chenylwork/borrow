@@ -24,7 +24,8 @@ function searchAccount(pageNo,length) {
         "pid":$("#pid").val(),
         "status":$("#status").val(),
         "no":pageNo,
-        "length":length
+        "length":length,
+        "use":1
     };
     console.info("查询参数为：");
     console.info(params)
@@ -59,6 +60,8 @@ function searchAccount(pageNo,length) {
                 /***************数据部分****************/
                 var dataArray = data.data.data;
                 for (var i in dataArray) {
+                    var status = dataArray[i].status;
+                    // if (status == 3 || status == "3") break;
                     var loan = "";
                     switch (dataArray[i].loan){
                         case "1" :
@@ -77,9 +80,9 @@ function searchAccount(pageNo,length) {
                         "<td>"+(dataArray[i].borrow == null ? "待录入" : dataArray[i].borrow)+"</td>\n" +
                         "<td>"+(dataArray[i].pid == null ? "待录入" : dataArray[i].pid)+"</td>\n" +
                         "<td>"+(dataArray[i].cardCode == null ? "待录入" : dataArray[i].cardCode)+"</td>\n" +
-                        "<td>"+(dataArray[i].payment == null ? "待录入" : dataArray[i].payment)+"</td>\n" +
+                        "<td>"+(dataArray[i].payment == null || dataArray[i].payment == 0 || dataArray[i].payment == '0' ? "待录入" : dataArray[i].payment)+"</td>\n" +
                         "<td>"+(dataArray[i].income == null? "待录入" : dataArray[i].income)+"</td>\n" +
-                        "<td>"+(dataArray[i].workTime == null? "待录入" : dataArray[i].workTime)+"年</td>\n" +
+                        "<td>"+(dataArray[i].workTime == null? "待录入" : dataArray[i].workTime)+"</td>\n" +
                         ////////////
                         "<td>"+(dataArray[i].house == null? "待录入" : dataArray[i].house)+"</td>\n" +
                         "<td>"+(dataArray[i].car == null? "待录入" : dataArray[i].car)+"</td>\n" +
@@ -87,9 +90,9 @@ function searchAccount(pageNo,length) {
                         "<td>"+(dataArray[i].creditCardNo == null? "无" : dataArray[i].creditCardNo)+"</td>\n" +
                         "<td>"+(dataArray[i].creditCardBank == null? "无" : dataArray[i].creditCardBank)+"</td>\n" +
                         /////////////
-                        "<td>"+(dataArray[i].startTime == null? "待录入" : dataArray[i].startTime)+"</td>"+
+                        "<td>"+(dataArray[i].openTime == null? "待录入" : dataArray[i].openTime)+"</td>"+
                         "<td>\n" +
-                        $("#status_"+dataArray[i].status).prop("outerHTML") +
+                        $("#status_"+status).prop("outerHTML") +
                         "</td>\n" +
                         "<td onclick='infoClickFunction("+dataArray[i].infoID+")'><a href=\"#\" class=\"btn btn-info btn-hover btn-sm\">\n" +
                         "操作" +
@@ -104,6 +107,7 @@ function searchAccount(pageNo,length) {
                 console.log(data);
                 pagintor(data.data.no,data.data.pages);
             } else {
+                pagintor(1,1);
                 $("#message").text(data.content);
             }
         },

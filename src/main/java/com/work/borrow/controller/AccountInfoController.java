@@ -9,10 +9,7 @@ import com.work.borrow.po.Message;
 import com.work.borrow.service.DataService;
 import com.work.borrow.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
@@ -130,8 +127,13 @@ public class AccountInfoController {
      * @return
      */
     @RequestMapping("/search")
-    public Message searchAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page) {
-        return dataService.searchAccountInfo(accountInfo,page);
+    public Message searchAccountInfo(AccountInfo accountInfo, Page<AccountInfo> page,
+                                     @RequestParam(value = "use",defaultValue = "0") String use) {
+        int unShowErrorInfo = 0;
+        if (use != null && !use.equals("")) {
+            unShowErrorInfo = Integer.valueOf(use);
+        }
+        return dataService.searchAccountInfo(accountInfo,page,unShowErrorInfo);
     }
 
     /**

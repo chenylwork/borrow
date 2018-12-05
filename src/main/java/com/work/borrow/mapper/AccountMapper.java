@@ -19,18 +19,20 @@ import java.util.Map;
 public interface AccountMapper {
     String ACCOUNT_INFO_PREFIX = "account";
     String PAGE_ALIAS = "page";
+    String NO_SHOW_ERROR_INFO = "use";
     String STATUS_OPEN = "0"; // 前台录入还未结束--》》》》录入中
     String STATUS_WRIT = "1"; //  等待后台审核-》》》》》》待审核
     String STATUS_PASS = "2"; // 审核通过，等待付款--》》》待付款
     String STATUS_ERROR = "3"; // 审核驳回 --》》》》》》》被驳回
     String STATUS_BEFORE = "4"; // 用户付款，等待放款 -》》待放款
     String STATUS_START = "5"; // 后台放款，-- 》》》》》》待还款
-    String STATUS_END = "6"; // 借款结束，已还款-》》》》》已还款
-    String STATUS_PAST = "7"; // 借款过期--》》》》》》》》已逾期
+    String STATUS_PAST = "6"; // 借款过期--》》》》》》》》已逾期
+    String STATUS_END = "7"; // 借款结束，已还款-》》》》》已还款
 
     // 用户不能重新借款的状态
-    String BORROW_UN_OVER = "'"+STATUS_WRIT+"','"+STATUS_PASS+"','"+STATUS_ERROR+"','"+
+    String BORROW_UN_OVER = "'"+STATUS_WRIT+"','"+STATUS_PASS+"','"+
             STATUS_BEFORE+"','"+STATUS_START+"','"+STATUS_PAST+"'";
+    // "','"+STATUS_ERROR+
 
     // 修改的状态
     String UPDATE_STATUS = "'"+STATUS_OPEN+"','"+STATUS_PASS+"'";
@@ -262,4 +264,7 @@ public interface AccountMapper {
      */
     @SelectProvider(type=AccountSqlProvider.class,method = "querySizeSql")
     public int size(AccountInfo accountInfo);
+
+    @SelectProvider(type=AccountSqlProvider.class,method = "queryErrorSizeSql")
+    public int errorSize(AccountInfo accountInfo);
 }

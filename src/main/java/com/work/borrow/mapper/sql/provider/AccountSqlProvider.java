@@ -3,6 +3,7 @@ package com.work.borrow.mapper.sql.provider;
 import com.work.borrow.annotation.Rid;
 import com.work.borrow.annotation.Table;
 import com.work.borrow.mapper.AccountMapper;
+import com.work.borrow.po.Account;
 import com.work.borrow.po.AccountInfo;
 import com.work.borrow.util.Page;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -27,22 +28,22 @@ public class AccountSqlProvider {
      */
      public StringBuffer whereSql(AccountInfo account) {
          StringBuffer stringBuffer = new StringBuffer();
-//         // 编号判断
-//         if (account.getId() != null && account.getId() != 0) {
-//             stringBuffer.append(" and id = #{account.id}");
-//         }
-//         // 账户判断
-//         if (account.getMobile() != null && !account.getMobile().equals("")) {
-//            stringBuffer.append(" and mobile = #{account.mobile}");
-//        }
-//        // 名称判断
-//        if (account.getName() != null && !account.getName().equals("")) {
-//            stringBuffer.append(" and name = #{account.name}");
-//        }
-//        // 身份证判断
-//        if (account.getPid() != null && !account.getPid().equals("")) {
-//            stringBuffer.append(" and pid = #{account.pid}");
-//        }
+         // 编号判断
+         if (account.getId() != null && account.getId() != 0) {
+             stringBuffer.append(" and id = #{id}");
+         }
+         // 账户判断
+         if (account.getAccount() != null && !account.getAccount().equals("")) {
+            stringBuffer.append(" and account = #{account}");
+        }
+        // 名称判断
+        if (account.getName() != null && !account.getName().equals("")) {
+            stringBuffer.append(" and name = #{name}");
+        }
+        // 身份证判断
+        if (account.getPid() != null && !account.getPid().equals("")) {
+            stringBuffer.append(" and pid = #{pid}");
+        }
         // 审批状态
          if (account.getStatus() != null && !account.getStatus().equals("")) {
              stringBuffer.append(" and `status` = #{status}");
@@ -64,6 +65,17 @@ public class AccountSqlProvider {
         stringBuffer.append(whereSql(accountInfo));
         logger.info("查询语句："+stringBuffer);
         return stringBuffer.toString();
+    }
+
+    /**
+     * 查询数据个数语句
+     * @param accountInfo
+     * @return
+     */
+    public String queryErrorSizeSql(AccountInfo accountInfo) {
+        String sql = querySizeSql(accountInfo);
+        sql = sql + " and `status` in ('"+AccountMapper.STATUS_ERROR+"') ";
+        return sql;
     }
 
     /**
@@ -91,9 +103,11 @@ public class AccountSqlProvider {
      */
     public String mysqlPageSql(Page page) {
         if (page == null || page.getNo() == 0 || page.getLength() == 0) return "";
-        int start = (page.getNo() - 1)  * page.getLength();
-        int end = page.getNo() * page.getLength();
-        return (" limit "+start+","+end);
+        int pageNo = page.getNo();
+        int length = page.getLength();
+
+        int start = (pageNo - 1)  * length;
+        return (" limit "+start+","+length);
     }
 
     /**
@@ -136,6 +150,7 @@ public class AccountSqlProvider {
     public String queryAccountInfosql(Map<String,Object> map) throws Exception{
         AccountInfo accountInfo = (AccountInfo)map.get(AccountMapper.ACCOUNT_INFO_PREFIX);
         Page page = (Page) map.get("page");
+        int use = (Integer) map.get(AccountMapper.NO_SHOW_ERROR_INFO);
         StringBuffer whereBuffer = new StringBuffer();
         Class<? extends AccountInfo> accountInfoClass = accountInfo.getClass();
         // 获取数据表名称
@@ -153,10 +168,13 @@ public class AccountSqlProvider {
                 }
             }
         }
-        String where = "";
+        String where = " where 1=1 ";
         if (whereBuffer.length() > 0) {
-            where = " where "+whereBuffer.substring(0,whereBuffer.lastIndexOf("and"));
+            where = where + " and "+whereBuffer.substring(0,whereBuffer.lastIndexOf("and"));
         }
+//        if (use == 1) {
+//            where = where+" and `status` not in ('"+AccountMapper.STATUS_ERROR+"') ";
+//        }
         String querySql = "select * from "+tableName+where+" order by opentime desc "+mysqlPageSql(page);
         logger.info(querySql);
         return querySql;

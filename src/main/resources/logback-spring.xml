@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration  scan="true" scanPeriod="60 seconds" debug="false">
     <contextName>logback</contextName>
+    <!--<property name="LOG_HOME" value="D:/borrow/log" />-->
+    <springProperty scope="context" name="LOG_HOME" source="project.log.home"/>
     <!-- 控制台 appender -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -13,7 +15,9 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
             <!-- log.dir 在maven profile里配置 -->
-            <fileNamePattern>./log/error/daotong-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>
+                ${LOG_HOME}/error/daotong-error-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
@@ -32,7 +36,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
             <fileNamePattern>
-                ./log/warn/daotong-warn-%d{yyyy-MM-dd}.log
+                ${LOG_HOME}/warn/daotong-warn-%d{yyyy-MM-dd}.log
             </fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
@@ -53,7 +57,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
             <fileNamePattern>
-                ./log/info/%d{yyyy-MM-dd}/%d{yyyy-MM-dd}.log
+                ${LOG_HOME}/info/%d{yyyy-MM-dd}/%d{yyyy-MM-dd}.log
             </fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <!--<maxHistory>60</maxHistory>-->

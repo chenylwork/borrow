@@ -91,7 +91,7 @@ public interface DataService {
      * @param accountInfo
      * @return
      */
-    Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page);
+    Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page,int use);
 
 
 

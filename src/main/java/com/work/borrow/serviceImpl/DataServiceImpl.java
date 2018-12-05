@@ -271,18 +271,24 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page) {
+    public Message searchAccountInfo(AccountInfo accountInfo,Page<AccountInfo> page,int use) {
         Message message = null;
         Map<String,Object> map = new HashMap<>();
         map.put(AccountMapper.ACCOUNT_INFO_PREFIX,accountInfo);
         map.put(AccountMapper.PAGE_ALIAS,page);
+        map.put(AccountMapper.NO_SHOW_ERROR_INFO,use);
         List<AccountInfo> accountList = accountMapper.queryAccountInfo(map);
         if (accountList != null && !accountList.isEmpty()) {
             message = Message.createSuccessMessage(Message.VALUE_CODE_ORDER_QUERY_Y, Message.VALUE_CONTENT_ORDER_QUERY_Y);
             if (page != null && page.getNo() != 0 && page.getLength() != 0) {
                 page.setData(accountList);
+                int size = accountMapper.size(accountInfo);
+                int errorSize = 0;
+                if (use == 1) {
+//                    errorSize = accountMapper.errorSize(accountInfo);
+                }
                 // 获取共个数
-                page.setSize(accountMapper.size(accountInfo));
+                page.setSize(size - errorSize);
                 message.put(Message.KEY_DATA, page);
             } else {
                 if (accountList.size() > 1) {
@@ -338,9 +344,11 @@ public class DataServiceImpl implements DataService {
         Message message = null;
         String status = accountInfo.getStatus();
         String account = accountInfo.getAccount();
+        String nowTime = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()).toString();
         // 审核通过
         if (status != null && status.equals(AccountMapper.STATUS_START)){
             messageCommon.setReviewMessage(account,status,messageCommon.getReviewSuccessMessage(account));
+            accountInfo.setOpenTime(nowTime);
         }
         // 审核驳回
         if (status != null && status.equals(AccountMapper.STATUS_START)){
@@ -348,8 +356,8 @@ public class DataServiceImpl implements DataService {
         }
         // 修改为放款时，加入时间
         if (status != null && status.equals(AccountMapper.STATUS_START)) {
-            String nowTime = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()).toString();
             accountInfo.setStartTime(nowTime);
+            accountInfo.setOpenTime(nowTime);
         }
         boolean updateStatus = accountMapper.updateStatus(accountInfo);
         if (updateStatus) {
