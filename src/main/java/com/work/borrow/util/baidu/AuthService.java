@@ -1,5 +1,6 @@
 package com.work.borrow.util.baidu;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.work.borrow.dao.redis.RedisDao;
 import com.work.borrow.dao.redis.RedisDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class AuthService {
         String clientSecret = "xAaMPpiz9gv4F6bpgZ3iMQV6c8pvx4y0";
         result = getAuth(clientId, clientSecret);
         redisDao.set(TOKEN,result,OUT_TIME-BEFORE_TIME);
+//        redisDao.set(TOKEN,"24.c7074ca207e8ad64f7f0629172d6bc4a.2592000.1544749071.282335-14699690",OUT_TIME-BEFORE_TIME);
         return result;
     }
 
@@ -74,7 +76,7 @@ public class AuthService {
             URL realUrl = new URL(getAccessTokenUrl);
             // 打开和URL之间的连接
             HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod("POST");
             connection.connect();
             // 获取所有响应头字段
             Map<String, List<String>> map = connection.getHeaderFields();
@@ -92,9 +94,12 @@ public class AuthService {
             /**
              * 返回结果示例
              */
-//            System.err.println("result:" + result);
-            JSONObject jsonObject = new JSONObject(result);
-            String access_token = jsonObject.getString("access_token");
+            System.err.println("result:" + result);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map resultMap = objectMapper.readValue(result, Map.class);
+//            JSONObject jsonObject = new JSONObject(result);
+            String access_token = (String) resultMap.get("access_token");
+//            String access_token = jsonObject.getString("access_token");
             return access_token;
         } catch (Exception e) {
             System.err.printf("获取token失败！");

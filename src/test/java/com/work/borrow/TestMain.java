@@ -60,5 +60,10 @@ public class TestMain {
 //            logger.info(field.getType().getSimpleName());
 //        });
     }
+    @Test
+    public void fun() {
+        String intern = "nishibushihsha".intern();
+        System.out.println(intern);
+    }
 
 }
