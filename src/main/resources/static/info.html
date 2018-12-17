@@ -40,6 +40,7 @@
         p{margin: 0 0 35px;}
         .img{transform: rotate(-90deg);}
         #head{font-size: 25px;margin-top: 35px;}
+        .hidden{display: none;}
     </style>
 </head>
 <body>
@@ -66,8 +67,8 @@
 </div>
 <!--<h1 align="center">用户借款信息</h1><br>-->
 
-<div id="wrap">
-    <div class="box">
+<div id="wrap" style="position: relative;">
+    <div class="box" id="info_box">
         <div>
             <img src="img/pid.jpg?V" id="pid-up" width="240px" height="330px" alt="身份证正面照" />
             <img src="img/pid.jpg?V" id="pid-down" width="240px" height="330px" alt="身份证反面照" />
@@ -167,10 +168,27 @@
                 <span>工作地址</span>
                 <span id="workAddress"></span>
             </p>
-            <p style="width:100%">
+            <p style="width:100%;position: relative;">
                 <span>居住地址:</span>
                 <span id="address"></span>
+                <button onclick="next_btn_fun()" class="btn btn-primary btn-xs" id="next_show" style="right:10px;position: absolute;">联系人</button>
             </p>
+        </div>
+    </div>
+    <div id="linkman_box"  style="position: absolute; top: 0; width: 100%;" class="hidden">
+        <div class="box">
+            <table class="table table-bordered" style="margin-bottom: 0px;">
+                <thead>
+                    <th>联系人电话</th>
+                    <th>联系人名称</th>
+                    <th>联系人关系</th>
+                </thead>
+                <tbody id="linkman_show_tbody">
+                </tbody>
+            </table>
+        </div>
+        <div class="box">
+            <button class="btn btn-primary btn-block" onclick="up_btn_fun()">借款信息</button>
         </div>
     </div>
 </div>
@@ -180,6 +198,14 @@
 <script src="js/myApp.js?v1"></script>
 <script src="js/jquery.min.js"></script>
 <script>
+    function next_btn_fun() {
+        $("#linkman_box").removeClass("hidden");
+        $("#info_box").addClass("hidden");
+    }
+    function up_btn_fun() {
+        $("#linkman_box").addClass("hidden");
+        $("#info_box").removeClass("hidden");
+    }
     $.ajax({
         url: url_m.prefic + "/account/info/search",
         data: {"id": getQueryString("id")},
@@ -201,6 +227,22 @@
             }
             // $("#account_status").val(accountInfo["status"]);
         },
+    });
+
+    $.get("linkman/get?infoId="+getQueryString("id"),function(result){
+        var linkmen = result.data;
+        var initHtml = "";
+        for(var i in linkmen) {
+            var linkman = linkmen[i];
+
+            initHtml += "<tr>";
+            initHtml += "<td>"+linkman.mobile+"</td>";
+            initHtml += "<td>"+linkman.name+"</td>";
+            initHtml += "<td>"+linkman.relation+"</td>";
+            initHtml += "</tr>";
+        }
+        $("#linkman_show_tbody").append(initHtml)
+        console.log(data);
     });
     $("#change_btn").click(function(){
         $.post(

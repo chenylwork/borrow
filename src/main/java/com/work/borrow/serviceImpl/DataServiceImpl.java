@@ -345,10 +345,10 @@ public class DataServiceImpl implements DataService {
         String status = accountInfo.getStatus();
         String account = accountInfo.getAccount();
         String nowTime = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date()).toString();
+        accountInfo.setOpenTime(nowTime);
         // 审核通过
         if (status != null && status.equals(AccountMapper.STATUS_START)){
             messageCommon.setReviewMessage(account,status,messageCommon.getReviewSuccessMessage(account));
-            accountInfo.setOpenTime(nowTime);
         }
         // 审核驳回
         if (status != null && status.equals(AccountMapper.STATUS_START)){
@@ -357,7 +357,7 @@ public class DataServiceImpl implements DataService {
         // 修改为放款时，加入时间
         if (status != null && status.equals(AccountMapper.STATUS_START)) {
             accountInfo.setStartTime(nowTime);
-            accountInfo.setOpenTime(nowTime);
+//            accountInfo.setOpenTime(nowTime);
         }
         boolean updateStatus = accountMapper.updateStatus(accountInfo);
         if (updateStatus) {

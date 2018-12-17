@@ -112,6 +112,7 @@
                 <version>2.2</version>
                 <configuration>
                     <url>http://localhost/manager/text</url>
+                    <!--<url>http://211.149.179.228/manager/text</url>-->
                     <username>root</username>
                     <password>root</password>
                     <update>true</update>
